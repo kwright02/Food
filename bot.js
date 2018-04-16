@@ -8,6 +8,8 @@ client.error = require('./util/errorLogger.js').run;
 client.tempProfiles = {};
 exports.client = client;
 
+client.on("error", (O_o) => {});
+
 client.on("guildMemberAdd", (user) => {
     let fireTime = new Date();
     let channel = user.guild.channels.find('name', 'welcome');
