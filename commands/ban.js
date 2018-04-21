@@ -10,13 +10,13 @@ module.exports = {
         if (reason) {
         await user.ban(`Banned by ${msg.author.tag} - ${reason}`);
         await msg.channel.send(`**${user.user.tag}** has been banned for '${reason}'`);
-        let channel = user.guild.channels.find('name', 'moderation');
+        let channel = user.guild.channels.find('name', 'moderation_logs');
         if (!channel) return;
         channel.send(`**${user.user.tag}** banned by **${msg.author.tag}** - **Reason:** ${reason}`);
         } else if (!reason) {
         await user.ban(`Banned by ${msg.author.tag} - No reason specified`);
         await msg.channel.send(`**${user.user.tag}** has been banned with no specified reason`); 
-        let channel = user.guild.channels.find('name', 'moderation');
+        let channel = user.guild.channels.find('name', 'moderation_logs');
         if (!channel) return;
         channel.send(`**${user.user.tag}** banned by **${msg.author.tag}** - **Reason:** None Provided`);
       }
