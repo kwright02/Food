@@ -1,7 +1,6 @@
 module.exports = {
     run: async (client, msg) => {
-        if (msg.author.bot) return;
-        if (!msg.guild) return;
+        if (msg.author.bot || !msg.guild) return;
         if (msg.content.startsWith(client.config.prefix)) {
             const args = msg.content.slice(client.config.prefix.length).trim().split(/ +/g);
             const command = args.shift().toLowerCase();
