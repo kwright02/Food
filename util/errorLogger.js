@@ -21,6 +21,5 @@ module.exports = {
                 }
             ]
         } });
-        m.react(':x:');
     }
 }
