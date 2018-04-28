@@ -11,7 +11,6 @@ module.exports = {
     },
     meta: {
         name: 'purge',
-        ownerOnly: false,
         description: 'Delete a certain amount of messages',
         usage: ''
     }
