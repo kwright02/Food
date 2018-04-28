@@ -20,7 +20,6 @@ module.exports = {
     },
     meta: {
         name: 'warn',
-        ownerOnly: false,
         description: 'Warn a user',
         usage: ''
     }
