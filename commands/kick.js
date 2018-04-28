@@ -23,7 +23,6 @@ module.exports = {
     },
     meta: {
         name: 'kick',
-        ownerOnly: false,
         description: 'Kick a user from the server',
         usage: ''
     }
