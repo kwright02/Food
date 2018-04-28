@@ -6,7 +6,6 @@ module.exports = {
             const command = args.shift().toLowerCase();
             try {
                 const commandFile = require(`../commands/${command}.js`);
-                if (!require('../util/cmdMetaCheck.js').run(client, msg, commandFile)) return;
                 commandFile.run(client, msg, args);
             } catch (err) {
                 if (err.toString().toLowerCase().includes('cannot find module')) return;       
