@@ -18,7 +18,6 @@ module.exports = {
 },
     meta: {
         name: 'info',
-        ownerOnly: false,
         description: 'Information about UFF',
         usage: ''
     }
