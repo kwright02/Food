@@ -5,7 +5,6 @@
     },
     meta: {
         name: 'ping',
-        ownerOnly: false,
         description: 'Shows the bots ping',
         usage: ''
     }
