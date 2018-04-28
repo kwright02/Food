@@ -15,7 +15,6 @@ module.exports = {
     },
     meta: {
         name: 'game',
-        ownerOnly: false,
         description: 'Join a game branch',
         usage: ''
     }
