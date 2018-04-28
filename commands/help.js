@@ -23,7 +23,6 @@ module.exports = {
     },
     meta: {
         name: 'help',
-        ownerOnly: false,
         description: 'Need help?',
         usage: ''
     }
