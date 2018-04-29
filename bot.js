@@ -11,12 +11,9 @@ client.on("error", (O_o) => {});
 
 client.on("guildMemberAdd", (user) => {
     let infoChannel = client.channels.get("420407754327457792");
-    let suggestChannel = client.channels.get("420411538449498113");
-    let botChannel = client.channels.get("399916099325657088");
     let channel = user.guild.channels.find('name', 'welcome');
     if (!channel) return;
-    channel.send(`Everyone welcome ${user.user} to United Federations of Food!\nCurrent Member Count: ${user.guild.memberCount}`);
-    user.send(`**Hello!**\n\nThank you for joining United Federations of Food. Please take a moment to familiarize yourself with our rules located in ${infoChannel}\nIf you play a certain game you can do ?rank (game here) in ${botChannel} to get that role so you can become apart of that games branch\nIf you play a game and we don't have a rank for it you can make a suggestion in ${suggestChannel}\nFeel free to contact one of our staff members if you need help with anything. A list of staff members is located in ${infoChannel}\n\n*We hope you have a good time!*\n*-UFF Staff Team*`)
+    channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
     var role = user.guild.roles.find('name', 'Members');
     user.addRole(role)
 });
@@ -24,7 +21,7 @@ client.on("guildMemberAdd", (user) => {
 client.on("guildMemberRemove", (user) => {
     let channel = user.guild.channels.find('name', 'leave');
     if (!channel) return;
-    channel.send(`**${user.user.tag}** has left!\nCurrent Member Count: ${user.guild.memberCount}`);
+    channel.send(`**${user.user.tag}** has left. We now have ${user.guild.memberCount} members`);
 });
 
 fs.readdir('./events', (err, files) => {
@@ -35,4 +32,3 @@ fs.readdir('./events', (err, files) => {
         client.on(eventName, (...args) => eventFunction.run(client, ...args));
     });
 });
-
