@@ -24,6 +24,17 @@ client.on("guildMemberRemove", (user) => {
     channel.send(`**${user.user.tag}** has left. We now have ${user.guild.memberCount} members`);
 });
 
+client.on("message", (message) => {
+  if (message.author.bot) return;
+
+  if (message.content.toLowerCase().includes("nigger")  || message.content.toLowerCase().includes("nig") || message.content.toLowerCase().includes("negro") || message.content.toLowerCase().includes("spick") || message.content.toLowerCase().includes("chink")) {
+    let channel = message.guild.channels.find('name', 'moderation_logs');
+       message.channel.send(`**${message.author.tag}** has been automatically warned for racism`)
+       channel.send(`**${message.author.tag}** automatically warned - **Reason:** Racism`)
+       message.delete()
+  }
+  });
+
 fs.readdir('./events', (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {
