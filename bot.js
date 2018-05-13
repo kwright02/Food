@@ -1,8 +1,7 @@
 const { Client } = require('discord.js');
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
-// client.config = require('./config.json');
-client.login("NDEzODUwNTY1MTM1NTY0ODE1.DdgH_Q.MpTOeMIoQnnFvbBtSVf5lCce3QA");
+client.config = require('./config.json');
 client.error = require('./error.js').run;
 client.tempProfiles = {};
 exports.client = client;
