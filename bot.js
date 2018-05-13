@@ -31,12 +31,6 @@ client.on("message", (message) => {
     message.delete();
     message.channel.send(message.author.toString() + ", please refrain from posting invite links.");
   }
-  // if (message.content.toLowerCase().includes("nigger")  || message.content.toLowerCase().includes("nig") || message.content.toLowerCase().includes("negro") || message.content.toLowerCase().includes("spick") || message.content.toLowerCase().includes("chink")) {
-  //   let channel = message.guild.channels.find('name', 'moderation_logs');
-  //      message.channel.send(`**${message.author.tag}** has been automatically warned for racism`)
-  //      channel.send(`**${message.author.tag}** automatically warned - **Reason:** Racism`)
-  //      message.delete()
-  // }
 });
 
 fs.readdir('./events', (err, files) => {
