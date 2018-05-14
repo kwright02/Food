@@ -25,12 +25,25 @@ client.on("guildMemberRemove", (user) => {
 
 client.on("message", (message) => {
   if (message.author.bot) return;
+  var user = message.mentions.members.first();
   var content = message.content;
+
   if(/discord\.gg\//.test(content) || /\.gg/.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
     message.channel.send(message.author.toString() + ", please refrain from posting invite links.");
+    let channel = message.guild.channels.find('name', 'mod_logs');
+    if (!channel) return;
+    const embed = new Discord.RichEmbed()
+    .setColor(0x42f471)
+    .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
+    .addField("User", `${message.author.tag}`, true)
+    .addField("Moderator", "Food#4973", true)
+    .addField("Reason", `Invite Links`, true)
+    .setFooter('UFF Moderation')
+    .setTimestamp()
+    channel.send( {embed} );
   }
-});
+  });
 
 fs.readdir('./events', (err, files) => {
     if (err) return console.error(err);
