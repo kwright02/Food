@@ -6,17 +6,11 @@ module.exports = {
         if (!args[0]) return msg.channel.send("Please enter a role to join!");
         if (msg.member.roles.has(role.id)) {
             msg.member.removeRole(role)
-            msg.channel.send("Taken role " + args.join(" ") + ` from ${msg.author.username}`).then(answer => {
-            answer.delete(5000)
-            msg.delete(5000)
-            });
+            msg.channel.send("Taken role " + args.join(" ") + ` from ${msg.author.username}`)
         }
         if (!msg.member.roles.has(role.id)) {
             msg.member.addRole(role)
-            msg.channel.send("Given role " + args.join(" ") + ` to ${msg.author.username}`).then(answer => {
-            answer.delete(5000)
-            msg.delete(5000)
-            });
+            msg.channel.send("Given role " + args.join(" ") + ` to ${msg.author.username}`)
         }
     },
     meta: {
