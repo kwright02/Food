@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports = {
     run: async (client, msg, args) => {
         const embed = new Discord.RichEmbed()
-.setAuthor(`Information about the United Federations of Food`, msg.guild.iconURL)
+.setAuthor(`Information about United Federations of Food`, msg.guild.iconURL)
 .addField("ID", `${msg.guild.id}`, true)
 .addField("Name", `United Federations of Food`, true)
 .addField("Owner", `MythicalFood (Shane)`, true)
