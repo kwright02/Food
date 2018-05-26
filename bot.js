@@ -31,7 +31,9 @@ client.on("message", (message) => {
   var content = message.content;
 
   if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
-// || /\.gg/.test(content)
+    if(message.guild.member(message.author).hasPermission("ADMINISTRATOR")) {
+      return;
+    }
     message.delete();
     message.reply("please refrain from posting invite links.");
     let channel = message.guild.channels.find('name', 'mod_logs');
