@@ -6,7 +6,7 @@ module.exports = {
         const help = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor("FoodBOT Commands", client.user.avatarURL)
-        .addField("Regular", "+ping - Shows the bots ping\n+help - Commands for the bot\n+food - Random food generation\n+info - Information about the United Federations of Food")
+.addField("Regular", "+ping - Shows the bots ping\n+help - Commands for the bot\n+food - Random food generation\n+info - Information about the United Federations of Food\n+role - Join a role\n+roles - List of roles\n+wyr - Would you rather, this or that\n+joke - Tells a joke\n+ship - Ships 2 users\n+emojify - Turn your message into emotes\n+suggest - Suggest something for the server\n+user - Information about a certain user")
         .setFooter(`If you are a staff member do +help staff`)
             msg.channel.send(help);
         } else if (args[0].toLowerCase() === 'staff') {
