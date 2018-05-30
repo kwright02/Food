@@ -1,7 +1,6 @@
 module.exports = {
     run: async (client, msg, args) => {
-        if (msg.author.id == client.config.synco) return msg.channel.send("No, Synco. No!");
-        let member = msg.mentions.members.first;
+        let member = msg.mentions.members.first();
         if (!msg.guild.me.hasPermission("MANAGE_MESSAGES")) return await msg.channel.send("SyncBOT does not have \`MANAGE_MESSAGES\` permission!");
         if (!msg.member.hasPermission("MANAGE_MESSAGES")) return await msg.channel.send("You do not have \`MANAGE_MESSAGES\` permission!");
         const count = parseInt(args[0]) + 1;
