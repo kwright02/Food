@@ -3,10 +3,6 @@ const Discord = require("discord.js");
 const userinfo = require("../data/userinfo.json");
 const fs = require("fs");
 
-// if(!userinfo) {
-  // console.log("Could not find userinfo.json");
-// }
-
 module.exports = {
     run: async (client, msg, args) => {
       var channel = msg.channel;
@@ -40,11 +36,11 @@ module.exports = {
             channel.send("Could not find user `" + args[1] + "`");
             return;
           }
-          if(userinfo[targUser.user.id]["permissions"].includes(args[2])) {
+          if(userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].includes(args[2])) {
             channel.send("User `" + args[1] + "` already has permission `" + args[2] + "`.");
             return;
           }
-          userinfo[targUser.user.id]["permissions"].push(args[2]);
+          userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].push(args[2]);
           channel.send("Added permission `" + args[2] + "` to user `" + args[1] + "`");
           saveInfo(userinfo);
           break;
@@ -69,11 +65,11 @@ module.exports = {
             channel.send("Could not find user `" + args[1] + "`");
             return;
           }
-          if(!userinfo[targUser.user.id]["permissions"].includes(args[2])) {
+          if(!userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].includes(args[2])) {
             channel.send("User `" + args[1] + "` does not have permission `" + args[2] + "`.");
             return;
           }
-          userinfo[targUser.user.id]["permissions"].pop(args[2]);
+          userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].pop(args[2]);
           channel.send("Removed permission `" + args[2] + "` to user `" + args[1] + "`");
           saveInfo(userinfo);
           break;
