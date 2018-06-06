@@ -13,8 +13,8 @@ module.exports = {
         .then(wh => {
         wh.send(embed)
          .then(msg => {
-          msg.react("\u2705")
-          msg.react("\u274E")
+          msg.react(client.guilds.get("370562411973050368").emojis.get("416036079020408842"))
+          msg.react(client.guilds.get("370562411973050368").emojis.get("416036102923878460"))
             })
         .then(() => {
         msg.channel.send(`Your suggestion has been sent to ${channel} to be reviewed. Thanks!`);
