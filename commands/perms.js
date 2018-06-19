@@ -94,15 +94,15 @@ module.exports = {
           .setColor(0x42f471)
           .setAuthor(`User Permissions | ${targUser.user.tag}`, client.user.avatarURL);
           var perms = "";
-          for(var i = 0; i < userinfo[targUser.user.id]["permissions"].length; i++) {
-            perms += userinfo[targUser.user.id]["permissions"][i] + "\n";
+          for(var i = 0; i < userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].length; i++) {
+            perms += userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"][i] + "\n";
           }
           if(!perms) {
             channel.send("User `" + args[1] + "` does not have any permissions.");
             return;
           }
           embed.addField("Permissions", perms)
-          .setFooter('Food Permissions')
+          .setFooter('UFF Permissions')
           .setTimestamp();
           channel.send( {embed} );
           break;

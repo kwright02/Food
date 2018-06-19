@@ -9,7 +9,7 @@ module.exports = {
                 commandFile.run(client, msg, args);
             } catch (err) {
                 if (err.toString().toLowerCase().includes('cannot find module')) return;       
-                client.error(client, err.stack, `(Message Handler) Command Run`, `**cmd:** ${msg.content} **user:** ${msg.author.tag} (${msg.author.id}) **guild:** ${msg.guild.name} (${msg.guild.id})`);
+                client.error(client, err.stack, `(Message Handler) Command Run`, `   Command: ${msg.content}\n   User: ${msg.author.tag} (${msg.author.id})`);
             }
         }
     }
