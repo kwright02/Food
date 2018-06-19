@@ -1,9 +1,9 @@
 const { Client } = require('discord.js');
 const Discord = require("discord.js");
+const userinfo = require("./data/userinfo.json")
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
 client.config = require('./config.json');
-client.login(client.config.token);
 client.error = require('./error.js').run;
 client.tempProfiles = {};
 exports.client = client;
@@ -17,7 +17,7 @@ client.on("guildMemberAdd", (user) => {
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
     var role = user.guild.roles.find('name', 'Members');
-    user.addRole(role)
+    user.addRole(role);
 });
 
 client.on("guildMemberRemove", (user) => {
@@ -41,6 +41,29 @@ client.on("message", (message) => {
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
       let channel = message.guild.channels.find('name', 'mod_logs');
       if (!channel) return;
+      if(!userinfo[message.guild.id]["members"][message.author.id]["warns"]) {
+        userinfo[message.guild.id]["members"][message.author.id]["warns"] = new Map();
+      }
+      var warns = userinfo[message.guild.id]["members"][message.author.id]["warns"];
+      var warnID = genRandom(5);
+      while(true) {
+        var valid = true;
+        for(targGuild in userinfo) {
+          for(targMemb in userinfo[targGuild]["members"]) {
+            for(targWarn in userinfo[targGuild]["members"][targMemb]["warns"]) {
+              if(warnID === targWarn) {
+                warnID = genRandom(5);
+                valid = false;
+              }
+            }
+          }
+        }
+        if(valid) {
+          break;
+        }
+      }
+      warns[warnID] = { "warranter":"automatic", "reason":"Blacklisted Phrase", "content":content };
+      saveInfo(userinfo, "./data/userinfo.json");
       const embed = new Discord.RichEmbed()
       .setColor(0x42f471)
       .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
@@ -82,3 +105,20 @@ fs.readdir('./events', (err, files) => {
         client.on(eventName, (...args) => eventFunction.run(client, ...args));
     });
 });
+
+function genRandom(length) {
+  var gen = "";
+  var alph = "abcdefghijklmnopqrstuvwxyz";
+  for(var i = 0; i < length; i++) {
+    gen += alph[Math.floor(Math.random() * 26) + 1];
+  }
+  return gen;
+}
+
+function saveInfo(info, path) {
+  fs.writeFile(path, JSON.stringify(info, null, " "), function (error) {
+    if (error) {
+     console.log(error);
+    }
+  });
+};
