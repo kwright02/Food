@@ -18,7 +18,7 @@ client.on("guildMemberAdd", (user) => {
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
     var role = user.guild.roles.find('name', 'Members');
-    var role2 = user.guild.roles.find('name', 'Events');
+    var role2 = user.guild.roles.find('name', 'Event Notify');
     user.addRole(role);
     user.addRole(role2);
 });
