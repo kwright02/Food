@@ -4,6 +4,7 @@ const userinfo = require("./data/userinfo.json")
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
 client.config = require('./config.json');
+client.login(client.config.token);
 client.error = require('./error.js').run;
 client.tempProfiles = {};
 exports.client = client;

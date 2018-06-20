@@ -4,11 +4,12 @@ const userinfo = require("../data/userinfo.json");
 
 module.exports = {
     run: async (client, msg, args) => {
+      if(userinfo[msg.guild.id]["members"][msg.author.id]["permissions"].includes("moderate")) return msg.channel.send("You are already a moderator.");
       sendSurvey(client, client.config.surveys.applymod, msg, "Moderator Application");
     },
     meta: {
-        name: 'ban',
-        description: 'Ban a user from the server',
+        name: 'applymod',
+        description: 'Apply for moderator rank',
         usage: ''
     }
 }
@@ -23,9 +24,9 @@ function saveInfo(info, path) {
 
 function sendSurvey(client, questSet, msg, survname) {
   try {
-    msg.author.send("Are you ready to begin? `Y/N`").catch(e => {
+    msg.author.send("**Requirements**\n\n- Must be a very active member of UFF.\n- Must have good knowledge of the UFF rules and Discord TOS.\n- Must have a mic.\n\n*Do you meet this requirements?* `Y/N`").catch(e => {
       if(e) {
-        return msg.channel.send('Oh noes! An error has occurred! We cannot DM you!');
+        return msg.channel.send('Please make your DMs avalible and try again.');
       }
     });
     var answers = [];
@@ -38,16 +39,15 @@ function sendSurvey(client, questSet, msg, survname) {
       await collector.on('collect', collectedMessage => {
         if(counter === 0) {
           if(/^y$/.test(collectedMessage.content.toLowerCase())) {
-            dmchan.send("Beginning survey...");
             dmchan.send(questSet[0]);
             counter++;
             return;
           } else if(/^n$/.test(collectedMessage.content.toLowerCase())) {
-            dmchan.send("Ending survey...");
+            dmchan.send("You must meet these requirements to apply, sorry.");
             collector.stop();
             return;
           } else {
-            dmchan.send("Are you ready to begin? `Y/N`");
+            dmchan.send("**Requirements**\n\n- Must be a very active member of UFF.\n- 2. Must have good knowledge of the UFF rules and Discord TOS.\n- 3. Must have a mic.\n\n*Do you meet this requirements? `Y/N`*");
             return;
           }
         }
@@ -63,21 +63,20 @@ function sendSurvey(client, questSet, msg, survname) {
           userinfo[msg.guild.id]["members"][msg.author.id]["applications"][userinfo[msg.guild.id]["members"][msg.author.id]["applications"].length] = { "application":"Branch Manager", "answers":collection };
           saveInfo(collection, "../data/userinfo.json");
           dmchan.startTyping();
-          dmchan.send("Survey over...");
+          dmchan.send("Thank you for applying, the recruitment team will read your application and you\'ll here back soon.");
           dmchan.stopTyping();
           collector.stop();
           var guildChans = msg.guild.channels.array();
           var logs = msg.guild.channels.find("name", "mod_logs");
           const embed = new Discord.RichEmbed()
           .setColor(0x42f471)
-          .setAuthor(`Survey Completion | ${msg.author.tag}`, client.user.avatarURL)
-          .addField("Survey", `survname`, false);
+          .setAuthor(`Application Completion | ${msg.author.tag}`, client.user.avatarURL)
           var counter2 = 1;
           for(var targQuest in collection) {
             embed.addField("Question #" + counter2, targQuest + ":\n" + collection[targQuest], false);
             counter2++;
           }
-          embed.setFooter("Questo Surveys")
+          embed.setFooter("UFF Recriutment")
           .setTimestamp();
           logs.send({ embed });
         } else {
