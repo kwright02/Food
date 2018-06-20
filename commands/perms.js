@@ -121,5 +121,4 @@ function saveInfo(info) {
      console.log(error);
     }
   });
-  console.log(require("../data/userinfo.json"));
 };
