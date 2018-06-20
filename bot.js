@@ -17,9 +17,9 @@ client.on("guildMemberAdd", (user) => {
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
     var role = user.guild.roles.find('name', 'Members');
-    user.addRole(role)    
     var role2 = user.guild.roles.find('name', 'Events');
-    user.addRole(role2)
+    user.addRole(role);
+    user.addRole(role2);
 });
 
 client.on("guildMemberRemove", (user) => {
@@ -30,7 +30,6 @@ client.on("guildMemberRemove", (user) => {
 
 client.on("message", (message) => {
   if (message.author.bot) return;
-  var user = message.mentions.members.first();
   var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content)) {
     message.delete();
