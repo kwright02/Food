@@ -13,8 +13,14 @@ module.exports = {
           var members = guilds[i].members.array();
           for(var j = 0; j < members.length; j++) {
             if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
-              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[] };
+              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "applications": {} };
               console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
+            }
+            if(!userinfo[guilds[i].id]["members"][members[j].user.id].hasOwnProperty("permissions")) {
+              userinfo[guilds[i].id]["members"][members[j].user.id]["permissions"] = [];
+            }
+            if(!userinfo[guilds[i].id]["members"][members[j].user.id].hasOwnProperty("applications")) {
+              userinfo[guilds[i].id]["members"][members[j].user.id]["applications"] = {};
             }
           }
         }
