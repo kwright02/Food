@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
-// This userinfo require is creating a JSON object out of the userinfo.json file
 const userinfo = require("../data/userinfo.json");
 const fs = require("fs");
 
 module.exports = {
     run: async (client, msg, args) => {
+     let user = msg.mentions.members.first();
       var channel = msg.channel;
       var members = msg.guild.members.array();
       if(!(msg.guild.member(msg.author).hasPermission("ADMINISTRATOR") || !userinfo[msg.author.id]["permissions"].includes("administrate"))) {
@@ -25,15 +25,17 @@ module.exports = {
             channel.send("Permission `" + args[2] + "` does not exist.");
             return;
           }
+      if (!user) user = msg.guild.members.get(args[0]);
+      if (!user) return await msg.channel.send("Please mention a valid user to add a permission to.");
           var targUser = null;
           for(var i = 0; i < members.length; i++) {
-            if(("@" + members[i].user.username + "#" + members[i].user.tag) === args[1] || members[i].user.id === args[1]) {
+            if(members[i].user.id === args[1] || members[i].user.id === user.id) {
               console.log("Found user");
               targUser = members[i];
             }
           }
           if(!targUser) {
-            channel.send("Could not find user `" + args[1] + "`");
+            channel.send("Could not find user `" + user + "`");
             return;
           }
           if(userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].includes(args[2])) {
@@ -53,16 +55,17 @@ module.exports = {
             channel.send("Permission `" + args[2] + "` does not exist.");
             return;
           }
+      if (!user) user = msg.guild.members.get(args[0]);
+      if (!user) return await msg.channel.send("Please mention a valid user to remove a permission from.");
           var targUser = null;
           for(var i = 0; i < members.length; i++) {
-            console.log("Target User: " + members[i].user.tag);
-            if(("@" + members[i].user.username + "#" + members[i].user.tag) === args[1] || members[i].user.id === args[1]) {
+            if(members[i].user.id === args[1] || members[i].user.id === user.id) {
               console.log("Found user");
               targUser = members[i];
             }
           }
           if(!targUser) {
-            channel.send("Could not find user `" + args[1] + "`");
+            channel.send("Could not find user `" + user + "`");
             return;
           }
           if(!userinfo[msg.guild.id]["members"][targUser.user.id]["permissions"].includes(args[2])) {
@@ -78,16 +81,17 @@ module.exports = {
             msg.reply("correct usage: `+perms show [user|userid]`");
             return;
           }
+      if (!user) user = msg.guild.members.get(args[0]);
+      if (!user) return await msg.channel.send("Please mention a valid user to show permissions.");
           var targUser = null;
           for(var i = 0; i < members.length; i++) {
-            console.log("Target User: " + members[i].user.tag);
-            if(("@" + members[i].user.username + "#" + members[i].user.tag) === args[1] || members[i].user.id === args[1]) {
+            if(members[i].user.id === args[1] || members[i].user.id === user.id) {
               console.log("Found user");
               targUser = members[i];
             }
           }
           if(!targUser) {
-            channel.send("Could not find user `" + args[1] + "`");
+            channel.send("Could not find user `" + user + "`");
             return;
           }
           const embed = new Discord.RichEmbed()
