@@ -36,6 +36,10 @@ client.on("messageReactionAdd", (reaction, user) => {
   if(reaction.emoji.name === "notify") member.removeRole(notify)
   var bh = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
   if(reaction.emoji.name === "Brawlhalla") member.addRole(bh)
+  var sot = client.guilds.get("370562411973050368").roles.find('name', 'Sea of Thieves');
+  if(reaction.emoji.name === "SoT") member.addRole(sot)
+  var ark = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
+  if(reaction.emoji.name === "ARK") member.addRole(ark)
   var csgo = client.guilds.get("370562411973050368").roles.find('name', 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.addRole(csgo)
   var ftn = client.guilds.get("370562411973050368").roles.find('name', 'Fortnite');
@@ -70,6 +74,10 @@ client.on("messageReactionRemove", (reaction, user) => {
   var notify = client.guilds.get("370562411973050368").roles.find('name', 'Notify');
   if(reaction.emoji.name === "notify") member.addRole(notify)
   var bh = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
+  var sot = client.guilds.get("370562411973050368").roles.find('name', 'Sea of Thieves');
+  if(reaction.emoji.name === "SoT") member.removeRole(sot)
+  var ark = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
+  if(reaction.emoji.name === "ARK") member.removeRole(ark)
   if(reaction.emoji.name === "Brawlhalla") member.removeRole(bh)
   var csgo = client.guilds.get("370562411973050368").roles.find('name', 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.removeRole(csgo)
