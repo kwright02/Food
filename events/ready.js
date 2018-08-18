@@ -7,7 +7,11 @@ module.exports = {
     let server = client.guilds.get("370562411973050368");
     let channel = client.channels.get("460515586661679114");
         channel.send(`**React to this message to get the roles**\n
+**Other**
 Notify - ${server.emojis.get("460571176528511000")}
+
+**Games**
+ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
 CS:GO - ${server.emojis.get("459930831176204289")}
 Fortnite - ${server.emojis.get("459931131924447234")}
@@ -24,6 +28,7 @@ Rust - ${server.emojis.get("459936871355645962")}
 Unturned - ${server.emojis.get("459931398938165249")}\n
 *If you spam the reactions the bot will lag and it will take some time for it to give/take your roles. If your reaction was removed because of the bot restart and you want to remove a role just react and un-react.*`)
          .then(msg => {
+          msg.react(server.emojis.get("480431935957762048"))
           msg.react(server.emojis.get("460571176528511000"))
           msg.react(server.emojis.get("459930326349774849"))
           msg.react(server.emojis.get("459930831176204289"))
