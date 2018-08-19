@@ -73,7 +73,7 @@ function sendSurvey(client, questSet, msg, survname) {
           .setAuthor(`Application Completion | ${msg.author.tag}`, client.user.avatarURL)
           var counter2 = 1;
           for(var targQuest in collection) {
-            embed.addField("Question #" + counter2, targQuest + ":\n" + collection[targQuest], false);
+            embed.addField(targQuest, collection[targQuest], false);
             counter2++;
           }
           embed.setFooter("UFF Recriutment")
