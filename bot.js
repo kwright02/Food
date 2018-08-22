@@ -6,7 +6,6 @@ const fs = require('fs');
 client.config = require('./config.json');
 client.login(client.config.token);
 client.error = require('./error.js').run;
-client.tempProfiles = {};
 exports.client = client;
 const blacklist = client.config.blacklist;
 
