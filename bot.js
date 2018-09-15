@@ -1,12 +1,17 @@
 const { Client } = require('discord.js');
 const Discord = require("discord.js");
-const userinfo = require("./data/userinfo.json")
+const userinfo = require("./data/userinfo.json");
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
+const Enmap = require('enmap');
 client.config = require('./config.json');
 client.login(client.config.token);
 client.error = require('./error.js').run;
-exports.client = client;
+client.info = new Enmap({
+  name: "userinfo",
+  autoFetch: true,
+  fetchAll: false
+});
 const blacklist = client.config.blacklist;
 
 client.on("error", (O_o) => {});
@@ -28,81 +33,122 @@ client.on("guildMemberRemove", (user) => {
     channel.send(`**${user.user.tag}** has left. We now have ${user.guild.memberCount} members`);
 });
 
+let cooldown = new Set();
+let ctime = 30;
+
+client.on("message", async message => {
+const key = `${message.author.id}`;
+if (message.author.bot) return;
+if (cooldown.has(message.author.id)) return;
+let member = message.guild.member(message.author);
+
+if(!client.info.get(`${message.author.id}`)) {
+   client.info.ensure(`${message.author.id}`, {
+      xp: 0,
+      level: 1,
+      points: 0,
+      daily: 0
+ });
+}
+let curPts = client.info.get(key, "points");
+let curXp = client.info.get(key, "xp");
+let curLvl = client.info.get(key, "level");
+let nxtLvl = client.info.get(key, "level") * 300;
+let nxtPts = client.info.get(key, "level") * 5;
+curXp += 5;
+client.info.set(key, curXp, "xp");
+cooldown.add(message.author.id);
+if (nxtLvl <= curXp) {
+   curLvl += 1;
+   client.info.set(key, curLvl, "level");
+   curXp = 0;
+   client.info.set(key, curXp, "xp");
+   curPts += nxtPts;
+   client.info.set(key, curPts, "points");
+    message.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
+   }
+ setTimeout(() => {
+  cooldown.delete(message.author.id)
+}, ctime * 1000);
+});
+
 client.on("messageReactionAdd", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
-  var notify = client.guilds.get("370562411973050368").roles.find('name', 'Notify');
+  const server = client.guilds.get("370562411973050368");
+  var notify = server.roles.find('name', 'Notify');
   if(reaction.emoji.name === "notify") member.removeRole(notify)
-  var bh = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
-  if(reaction.emoji.name === "Brawlhalla") member.addRole(bh)
-  var sot = client.guilds.get("370562411973050368").roles.find('name', 'Sea of Thieves');
+  var sot = server.roles.find('name', 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.addRole(sot)
-  var ark = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
+  var ark = server.roles.find('name', 'ARK');
   if(reaction.emoji.name === "ARK") member.addRole(ark)
-  var csgo = client.guilds.get("370562411973050368").roles.find('name', 'CS:GO');
+  var bh = server.roles.find('name', 'Brawlhalla');
+  if(reaction.emoji.name === "Brawlhalla") member.addRole(bh)
+  var csgo = server.roles.find('name', 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.addRole(csgo)
-  var ftn = client.guilds.get("370562411973050368").roles.find('name', 'Fortnite');
+  var ftn = server.roles.find('name', 'Fortnite');
   if(reaction.emoji.name === "Fortnite") member.addRole(ftn)
-  var gmod = client.guilds.get("370562411973050368").roles.find('name', 'Gmod');
+  var gmod = server.roles.find('name', 'Gmod');
   if(reaction.emoji.name === "Gmod") member.addRole(gmod)
-  var lol = client.guilds.get("370562411973050368").roles.find('name', 'League of Legends');
+  var lol = server.roles.find('name', 'League of Legends');
   if(reaction.emoji.name === "LOL") member.addRole(lol)
-  var mc = client.guilds.get("370562411973050368").roles.find('name', 'Minecraft');
+  var mc = server.roles.find('name', 'Minecraft');
   if(reaction.emoji.name === "Minecraft") member.addRole(mc)
-  var ow = client.guilds.get("370562411973050368").roles.find('name', 'Overwatch');
+  var ow = server.roles.find('name', 'Overwatch');
   if(reaction.emoji.name === "Overwatch") member.addRole(ow)
-  var pd = client.guilds.get("370562411973050368").roles.find('name', 'Payday');
+  var pd = server.roles.find('name', 'Payday');
   if(reaction.emoji.name === "Payday") member.addRole(pd)
-  var pubg = client.guilds.get("370562411973050368").roles.find('name', 'PUBG');
+  var pubg = server.roles.find('name', 'PUBG');
   if(reaction.emoji.name === "PUBG") member.addRole(pubg)
-  var rl = client.guilds.get("370562411973050368").roles.find('name', 'Rocket League');
+  var rl = server.roles.find('name', 'Rocket League');
   if(reaction.emoji.name === "RocketLeague") member.addRole(rl)
-  var r6 = client.guilds.get("370562411973050368").roles.find('name', 'Rainbow Six Seige');
+  var r6 = server.roles.find('name', 'Rainbow Six Seige');
   if(reaction.emoji.name === "R6") member.addRole(r6)
-  var rb = client.guilds.get("370562411973050368").roles.find('name', 'Roblox');
+  var rb = server.roles.find('name', 'Roblox');
   if(reaction.emoji.name === "Roblox") member.addRole(rb)
-  var ru = client.guilds.get("370562411973050368").roles.find('name', 'Rust');
+  var ru = server.roles.find('name', 'Rust');
   if(reaction.emoji.name === "Rust") member.addRole(ru)
-  var un = client.guilds.get("370562411973050368").roles.find('name', 'Unturned');
+  var un = server.roles.find('name', 'Unturned');
   if(reaction.emoji.name === "Unturned") member.addRole(un)
 });
 
 client.on("messageReactionRemove", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
-  var notify = client.guilds.get("370562411973050368").roles.find('name', 'Notify');
+  const server = client.guilds.get("370562411973050368");
+  var notify = server.roles.find('name', 'Notify');
   if(reaction.emoji.name === "notify") member.addRole(notify)
-  var bh = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
-  var sot = client.guilds.get("370562411973050368").roles.find('name', 'Sea of Thieves');
+  var sot = server.roles.find('name', 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.removeRole(sot)
-  var ark = client.guilds.get("370562411973050368").roles.find('name', 'Brawlhalla');
+  var ark = server.roles.find('name', 'ARK');
   if(reaction.emoji.name === "ARK") member.removeRole(ark)
+  var bh = server.roles.find('name', 'Brawlhalla');
   if(reaction.emoji.name === "Brawlhalla") member.removeRole(bh)
-  var csgo = client.guilds.get("370562411973050368").roles.find('name', 'CS:GO');
+  var csgo = server.roles.find('name', 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.removeRole(csgo)
-  var ftn = client.guilds.get("370562411973050368").roles.find('name', 'Fortnite');
+  var ftn = server.roles.find('name', 'Fortnite');
   if(reaction.emoji.name === "Fortnite") member.removeRole(ftn)
-  var gmod = client.guilds.get("370562411973050368").roles.find('name', 'Gmod');
+  var gmod = server.roles.find('name', 'Gmod');
   if(reaction.emoji.name === "Gmod") member.removeRole(gmod)
-  var lol = client.guilds.get("370562411973050368").roles.find('name', 'League of Legends');
+  var lol = server.roles.find('name', 'League of Legends');
   if(reaction.emoji.name === "LOL") member.removeRole(lol)
-  var mc = client.guilds.get("370562411973050368").roles.find('name', 'Minecraft');
+  var mc = server.roles.find('name', 'Minecraft');
   if(reaction.emoji.name === "Minecraft") member.removeRole(mc)
-  var ow = client.guilds.get("370562411973050368").roles.find('name', 'Overwatch');
+  var ow = server.roles.find('name', 'Overwatch');
   if(reaction.emoji.name === "Overwatch") member.removeRole(ow)
-  var pd = client.guilds.get("370562411973050368").roles.find('name', 'Payday');
+  var pd = server.roles.find('name', 'Payday');
   if(reaction.emoji.name === "Payday") member.removeRole(pd)
-  var pubg = client.guilds.get("370562411973050368").roles.find('name', 'PUBG');
+  var pubg = server.roles.find('name', 'PUBG');
   if(reaction.emoji.name === "PUBG") member.removeRole(pubg)
-  var rl = client.guilds.get("370562411973050368").roles.find('name', 'Rocket League');
+  var rl = server.roles.find('name', 'Rocket League');
   if(reaction.emoji.name === "RocketLeague") member.removeRole(rl)
-  var r6 = client.guilds.get("370562411973050368").roles.find('name', 'Rainbow Six Seige');
+  var r6 = server.roles.find('name', 'Rainbow Six Seige');
   if(reaction.emoji.name === "R6") member.removeRole(r6)
-  var rb = client.guilds.get("370562411973050368").roles.find('name', 'Roblox');
+  var rb = server.roles.find('name', 'Roblox');
   if(reaction.emoji.name === "Roblox") member.removeRole(rb)
-  var ru = client.guilds.get("370562411973050368").roles.find('name', 'Rust');
+  var ru = server.roles.find('name', 'Rust');
   if(reaction.emoji.name === "Rust") member.removeRole(ru)
-  var un = client.guilds.get("370562411973050368").roles.find('name', 'Unturned');
+  var un = server.roles.find('name', 'Unturned');
   if(reaction.emoji.name === "Unturned") member.removeRole(un)
 });
 
@@ -121,8 +167,6 @@ client.on("message", (message) => {
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
       let channel = message.guild.channels.find('name', 'mod_logs');
       if (!channel) return;
-      userinfo[message.guild.id]["members"][message.author.id]["punishments"].push("`Warn -` Reason: Blacklisted Phrase | Moderator: Automated");
-      saveInfo(userinfo, "./data/userinfo.json");
       const embed = new Discord.RichEmbed()
       .setColor(0x42f471)
       .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
@@ -144,8 +188,6 @@ client.on("message", (message) => {
     message.reply("please refrain from posting invite links.");
     let channel = message.guild.channels.find('name', 'mod_logs');
     if (!channel) return;
-    userinfo[message.guild.id]["members"][message.author.id]["punishments"].push("`Warn -` Reason: Unapproved Advertisement | Moderator: Automated");
-    saveInfo(userinfo, "./data/userinfo.json");
     const embed = new Discord.RichEmbed()
     .setColor(0x42f471)
     .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
