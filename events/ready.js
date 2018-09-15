@@ -1,11 +1,18 @@
 const userinfo = require("../data/userinfo.json");
 const fs = require("fs");
+const Enmap = require('enmap');
 
 module.exports = {
     run: async (client) => {
-    console.log(`Ready!`);
+if(client.info.isReady) { 
+  console.log("\nDB Loaded...")
+} else {
+  console.log("X DB Not Loaded X")
+}
+    console.log("Bot Loaded...\n\nEverything's good!");
     let server = client.guilds.get("370562411973050368");
     let channel = client.channels.get("460515586661679114");
+     channel.bulkDelete(10);
         channel.send(`**React to this message to get the roles**\n
 **Other**
 Notify - ${server.emojis.get("460571176528511000")}
@@ -25,6 +32,7 @@ Rocket League - ${server.emojis.get("459935810989326336")}
 Rainbow Six Seige - ${server.emojis.get("459936293451988992")}
 Roblox - ${server.emojis.get("459936570208681994")}
 Rust - ${server.emojis.get("459936871355645962")}
+Sea of Thieves - ${server.emojis.get("473540641423622164")}
 Unturned - ${server.emojis.get("459931398938165249")}\n
 *If you spam the reactions the bot will lag and it will take some time for it to give/take your roles. If your reaction was removed because of the bot restart and you want to remove a role just react and un-react.*`)
          .then(msg => {
@@ -44,27 +52,19 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
           msg.react(server.emojis.get("459936570208681994"))
           msg.react(server.emojis.get("459936871355645962"))
           msg.react(server.emojis.get("459931398938165249"))
+          msg.react(server.emojis.get("473540641423622164"))
             })
         var guilds = client.guilds.array();
         for(var i = 0; i < guilds.length; i++) {
           if(!userinfo.hasOwnProperty(guilds[i].id)) {
             userinfo[guilds[i].id] = { "members": {} };
-            console.log("Added guild " + guilds[i].name + " of id " + guilds[i].id + " to userinfo guilds list");
+            console.log("All user information has been reset");
           }
           var members = guilds[i].members.array();
           for(var j = 0; j < members.length; j++) {
             if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
               userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "punishments":[], "applications": {} };
               console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
-            }
-            if(!userinfo[guilds[i].id]["members"][members[j].user.id].hasOwnProperty("permissions")) {
-              userinfo[guilds[i].id]["members"][members[j].user.id]["permissions"] = [];
-            }
-            if(!userinfo[guilds[i].id]["members"][members[j].user.id].hasOwnProperty("punishments")) {
-              userinfo[guilds[i].id]["members"][members[j].user.id]["punishments"] = {};
-            }
-            if(!userinfo[guilds[i].id]["members"][members[j].user.id].hasOwnProperty("applications")) {
-              userinfo[guilds[i].id]["members"][members[j].user.id]["applications"] = {};
             }
           }
         }
