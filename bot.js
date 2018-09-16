@@ -48,6 +48,34 @@ client.on("guildMemberRemove", (user) => {
     channel.send(`**${user.user.tag}** has left. We now have ${user.guild.memberCount} members`);
 });
 
+client.on('messageUpdate', (oldMessage, newMessage) => {
+if (oldMessage.content.length < 1) return;
+    let channel = oldMessage.guild.channels.find('name', 'action_logs');
+    if (!channel) return;
+        const embed = new Discord.RichEmbed()
+        .setColor(0x42f471)
+        .setAuthor(`Message Update | ${oldMessage.author.tag}`, client.user.avatarURL)
+        .addField("ID", `${newMessage.id}`, true)
+        .addField("Before", `${oldMessage}`, true)
+        .addField("After", `${newMessage}`, true)
+        .setTimestamp()
+        channel.send( {embed} );
+});
+
+client.on("messageDelete", (dm) => {
+if (dm.content.length < 1) return;
+if (dm.author.bot) return;
+    let channel = dm.guild.channels.find('name', 'action_logs');
+    if (!channel) return;
+        const embed = new Discord.RichEmbed()
+        .setColor(0x42f471)
+        .setAuthor(`Message Delete | ${dm.author.tag}`, client.user.avatarURL)
+        .addField("ID", `${dm.id}`, true)
+        .addField("Content", `${dm}`, true)
+        .setTimestamp()
+        channel.send( {embed} );
+});
+
 let cooldown = new Set();
 let ctime = 30;
 
