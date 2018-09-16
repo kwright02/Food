@@ -25,6 +25,21 @@ client.on("guildMemberAdd", (user) => {
     var role2 = user.guild.roles.find('name', 'Notify');
     user.addRole(role);
     user.addRole(role2);
+        var guilds = client.guilds.array();
+        for(var i = 0; i < guilds.length; i++) {
+          if(!userinfo.hasOwnProperty(guilds[i].id)) {
+            userinfo[guilds[i].id] = { "members": {} };
+            console.log("All user information has been reset");
+          }
+          var members = guilds[i].members.array();
+          for(var j = 0; j < members.length; j++) {
+            if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
+              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "punishments":[], "applications": {} };
+              console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
+            }
+          }
+        }
+        saveInfo(userinfo, "./data/userinfo.json");
 });
 
 client.on("guildMemberRemove", (user) => {
