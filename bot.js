@@ -79,14 +79,14 @@ if (dm.author.bot) return;
 let cooldown = new Set();
 let ctime = 30;
 
-client.on("message", async message => {
-const key = `${message.author.id}`;
-if (message.author.bot) return;
-if (cooldown.has(message.author.id)) return;
-let member = message.guild.member(message.author);
+client.on("message", async msg => {
+const key = `${msg.author.id}`;
+if (msg.author.bot) return;
+if (cooldown.has(msg.author.id)) return;
+let member = msg.guild.member(msg.author);
 
-if(!client.info.get(`${message.author.id}`)) {
-   client.info.ensure(`${message.author.id}`, {
+if(!client.info.get(`${msg.author.id}`)) {
+   client.info.ensure(`${msg.author.id}`, {
       xp: 0,
       level: 1,
       points: 0,
@@ -100,7 +100,7 @@ let nxtLvl = client.info.get(key, "level") * 300;
 let nxtPts = client.info.get(key, "level") * 5;
 curXp += 5;
 client.info.set(key, curXp, "xp");
-cooldown.add(message.author.id);
+cooldown.add(msg.author.id);
 if (nxtLvl <= curXp) {
    curLvl += 1;
    client.info.set(key, curLvl, "level");
@@ -108,10 +108,10 @@ if (nxtLvl <= curXp) {
    client.info.set(key, curXp, "xp");
    curPts += nxtPts;
    client.info.set(key, curPts, "points");
-    message.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
+    msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
    }
  setTimeout(() => {
-  cooldown.delete(message.author.id)
+  cooldown.delete(msg.author.id)
 }, ctime * 1000);
 });
 
