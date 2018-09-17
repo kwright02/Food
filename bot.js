@@ -196,7 +196,7 @@ client.on("messageReactionRemove", (reaction, user) => {
 });
 
 client.on("message", (message) => {
-  // if (message.channel.id = "466125992986017804") return;
+  if (message.guild.member(message.author).hasPermission("ADMINISTRATOR")) return;
   if (message.author.bot) return;
   var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content)) {
@@ -222,11 +222,8 @@ client.on("message", (message) => {
       return;
     }
   }
-  if(message.channel.id == "466125992986017804") return;
+   if(message.channel.id == "466125992986017804") return;
    if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
-     if(message.guild.member(message.author).hasPermission("ADMINISTRATOR")) {
-     return;
-    }
     message.delete();
     message.reply("please refrain from posting invite links.");
     let channel = message.guild.channels.find('name', 'mod_logs');
