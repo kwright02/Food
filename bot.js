@@ -196,7 +196,6 @@ client.on("messageReactionRemove", (reaction, user) => {
 });
 
 client.on("message", (message) => {
-  if (message.guild.member(message.author).hasPermission("ADMINISTRATOR")) return;
   if (message.author.bot) return;
   var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content)) {
