@@ -63,7 +63,7 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
           var members = guilds[i].members.array();
           for(var j = 0; j < members.length; j++) {
             if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
-              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "punishments":[], "applications": {} };
+              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "punishments":[] };
               console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
             }
           }
