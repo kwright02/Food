@@ -14,14 +14,6 @@ module.exports = {
     }
 }
 
-function saveInfo(info, path) {
-  fs.writeFile(path, JSON.stringify(info, null, " "), function (error) {
-    if (error) {
-     console.log(error);
-    }
-  });
-};
-
 function sendSurvey(client, questSet, msg, survname) {
   try {
     msg.author.send("**Requirements**\n\n- Must own the game you're applying for on PC\n- Must have good knowledge of the game you're applying for\n- Must have good communication skills to be able to interact with the users in your branch\n- Must have a mic\n\n*Do you meet this requirements?* `Y/N`").catch(e => {
@@ -60,8 +52,6 @@ function sendSurvey(client, questSet, msg, survname) {
             console.log("Test: " + collection[questSet[i]]);
           }
           console.log(collection);
-          userinfo[msg.guild.id]["members"][msg.author.id]["applications"][userinfo[msg.guild.id]["members"][msg.author.id]["applications"].length] = { "application":"Branch Manager", "answers":collection };
-          saveInfo(collection, "../data/userinfo.json");
           dmchan.startTyping();
           dmchan.send("Thank you for applying, the recruitment team will read your application and you\'ll here back soon.");
           dmchan.stopTyping();
