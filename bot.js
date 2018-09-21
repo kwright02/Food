@@ -51,6 +51,7 @@ client.on("guildMemberRemove", (user) => {
 client.on('messageUpdate', (oldMessage, newMessage) => {
 if (oldMessage.content.length < 1) return;
 if (oldMessage.content.length > 1000) return;
+if (oldMessage.author.bot) return;
     let channel = oldMessage.guild.channels.find('name', 'action_logs');
     if (!channel) return;
         const embed = new Discord.RichEmbed()
