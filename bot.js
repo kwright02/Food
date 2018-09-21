@@ -52,6 +52,7 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 if (oldMessage.content.length < 1) return;
 if (oldMessage.content.length > 1000) return;
 if (oldMessage.author.bot) return;
+if (oldMessage.guild === null) return;
     let channel = oldMessage.guild.channels.find('name', 'action_logs');
     if (!channel) return;
         const embed = new Discord.RichEmbed()
@@ -68,6 +69,7 @@ client.on("messageDelete", (dm) => {
 if (dm.content.length < 1) return;
 if (dm.content.length > 1000) return;
 if (dm.author.bot) return;
+if (dm.guild === null) return;
     let channel = dm.guild.channels.find('name', 'action_logs');
     if (!channel) return;
         const embed = new Discord.RichEmbed()
