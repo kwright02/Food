@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 module.exports = {
     run: async (client, msg, args) => {
         let member = msg.mentions.members.first();
@@ -8,6 +10,16 @@ module.exports = {
         if (count > 100 || count < 3) return await msg.channel.send("Please make sure your amount is between 2 and 100!");
         const deleted = await msg.channel.bulkDelete(count);
         const amount = deleted.size - 1;
+        let channel = msg.guild.channels.find('name', 'mod_logs');
+        if (!channel) return;
+        const embed = new Discord.RichEmbed()
+        .setColor(0x42f471)
+        .setAuthor(`Purge | ${msg.author.tag}`, client.user.avatarURL)
+        .addField("Channel", `${msg.channel}`, true)
+        .addField("Messages Deleted", `${amount}`, true)
+        .setFooter('UFF Moderation')
+        .setTimestamp()
+        await channel.send( {embed} );
     },
     meta: {
         name: 'purge',
