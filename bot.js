@@ -65,18 +65,30 @@ if (oldMessage.guild === null) return;
         channel.send( {embed} );
 });
 
-client.on("messageDelete", (dm) => {
+client.on("messageDelete", async (dm) => {
 if (dm.content.length < 1) return;
 if (dm.content.length > 1000) return;
 if (dm.author.bot) return;
 if (dm.guild === null) return;
     let channel = dm.guild.channels.find('name', 'action_logs');
     if (!channel) return;
+    const entry = await dm.guild.fetchAuditLogs({type: 'MESSAGE_DELETE'}).then(audit => audit.entries.first());
+    let deleter = ""
+    if (entry.extra.channel.id === dm.channel.id
+      && (entry.target.id === dm.author.id)
+      && (entry.createdTimestamp > (Date.now() - 5000))
+      && (entry.extra.count >= 1)) {
+    deleter = entry.executor.username
+  } else { 
+    deleter = dm.author.username
+         }
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor(`Message Delete | ${dm.author.tag}`, client.user.avatarURL)
-        .addField("ID", `${dm.id}`, true)
+        .addField("Deleter", `${deleter}`, true)
+        .addField("Channel", `${dm.channel}`, true)
         .addField("Content", `${dm}`, true)
+        .setFooter(dm.id)
         .setTimestamp()
         channel.send( {embed} );
 });
