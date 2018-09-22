@@ -53,6 +53,7 @@ if (oldMessage.content.length < 1) return;
 if (oldMessage.content.length > 1000) return;
 if (oldMessage.author.bot) return;
 if (oldMessage.guild === null) return;
+if (newMessage.content === oldMessage.content) return;
     let channel = oldMessage.guild.channels.find('name', 'action_logs');
     if (!channel) return;
         const embed = new Discord.RichEmbed()
