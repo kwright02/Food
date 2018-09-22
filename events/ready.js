@@ -10,6 +10,10 @@ if(client.info.isReady) {
   console.log("X DB Not Loaded X")
 }
     console.log("Bot Loaded...\n\nEverything's good!");
+    var currentdate = new Date();
+    let logs = client.channels.find('name', 'bot_logs');
+    let hour = currentdate.getHours() + 3;
+    logs.send(":white_check_mark: Bot Online **(" + currentdate.getDay() + "/"+currentdate.getMonth() + "/" + currentdate.getFullYear() + " - " + hour + ":" + currentdate.getMinutes() + " EST)**");
     let server = client.guilds.get("370562411973050368");
     let channel = client.channels.get("460515586661679114");
      channel.bulkDelete(10);
