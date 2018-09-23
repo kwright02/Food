@@ -94,6 +94,15 @@ if (dm.guild === null) return;
         channel.send( {embed} );
 });
 
+client.on("message", msg => {
+let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
+let random = cards[Math.floor(Math.random() * cards.length)];
+if (msg.author.bot) return;
+if (msg.content === "no u") {
+msg.channel.send("", {files: [random]})
+   }
+});
+
 let cooldown = new Set();
 let ctime = 30;
 
