@@ -73,6 +73,46 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
           }
         }
         saveInfo(userinfo, "./data/userinfo.json");
+let mods = client.guilds.get("370562411973050368").roles.get("413849966897790976").members.forEach(m => {
+
+  if (userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("moderate")) return;
+  userinfo["370562411973050368"]["members"][m.user.id]["permissions"].push("moderate");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"moderate\" to " + m.user.tag);
+
+});
+let developers = client.guilds.get("370562411973050368").roles.get("406853879029039105").members.forEach(m => {
+
+  if (userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("administrate")) return;
+  userinfo["370562411973050368"]["members"][m.user.id]["permissions"].push("administrate");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"administrate\" to " + m.user.tag);
+
+});
+let admins1 = client.guilds.get("370562411973050368").roles.get("370564582449872896").members.forEach(a => {
+
+  if (userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("administrate")) return;
+  userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("administrate");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"administrate\" to " + a.user.tag);
+
+});
+let admins2 = client.guilds.get("370562411973050368").roles.get("370564582449872896").members.forEach(a => {
+
+  if (userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("moderate")) return;
+  userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("moderate");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"moderate\" to " + a.user.tag);
+
+});
+let admins3 = client.guilds.get("370562411973050368").roles.get("370564582449872896").members.forEach(a => {
+
+  if (userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("points")) return;
+  userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("points");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"points\" to " + a.user.tag);
+
+});
   }
 }
 
