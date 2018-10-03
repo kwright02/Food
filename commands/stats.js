@@ -20,10 +20,12 @@ module.exports = {
        let userPoints = client.info.get(key, "points")
        let userXp = client.info.get(key, "xp")
        let userLevel = client.info.get(key, "level")
+       let totUntil = userLevel * 300;
+       let curUntil = totUntil - userXp;
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor(msg.author.username + "'s Stats", client.user.avatarURL)
-        .setDescription(`**Points**: ${userPoints}\n**XP**: ${userXp}\n**Level**: ${userLevel}`)
+        .setDescription(`**Points**: ${userPoints}\n**XP**: ${userXp}\n**Level**: ${userLevel}\n**XP Until Level Up**: ${curUntil}`)
         await msg.channel.send( {embed} );
             } else {
           var targUser = null;
@@ -49,10 +51,12 @@ module.exports = {
        let userPoints2 = client.info.get(key2, "points")
        let userXp2 = client.info.get(key2, "xp")
        let userLevel2 = client.info.get(key2, "level")
+       let totUntil2 = userLevel2 * 300;
+       let curUntil2 = totUntil2 - userXp2;
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor(targUser.user.username + "'s Stats", targUser.user.avatarURL)
-        .setDescription(`**Points**: ${userPoints2}\n**XP**: ${userXp2}\n**Level**: ${userLevel2}`)
+        .setDescription(`**Points**: ${userPoints2}\n**XP**: ${userXp2}\n**Level**: ${userLevel2}\n**XP Until Level Up**: ${curUntil2}`)
         await msg.channel.send( {embed} );
       }
     },
