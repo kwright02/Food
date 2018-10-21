@@ -15,7 +15,6 @@ let curDaily = client.info.get(key, "daily");
       daily: 0
     });
      }
-console.log(moment().format('L'));
       if (curDaily != moment().format('L')) {
           curDaily = moment().format('L');
           client.info.set(key, curDaily, "daily");
