@@ -7,7 +7,8 @@ module.exports = {
      let user = msg.mentions.members.first();
       var channel = msg.channel;
       var members = msg.guild.members.array();
-      if(!(msg.guild.member(msg.author).hasPermission("ADMINISTRATOR") || !userinfo[msg.author.id]["permissions"].includes("administrate"))) {
+      console.log(userinfo["370562411973050368"]["members"]["216280814172897280"]);
+      if(!(msg.guild.member(msg.author).hasPermission("ADMINISTRATOR") || !userinfo["370562411973050368"]["members"][msg.author.id]["permissions"].includes("administrate"))) {
         channel.send("You must have the `ADMINISTRATOR` permission in this guild or have the Food `administrate` permission.");
         return;
       }

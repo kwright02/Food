@@ -57,7 +57,7 @@ function sendSurvey(client, questSet, msg, survname) {
           dmchan.stopTyping();
           collector.stop();
           var guildChans = msg.guild.channels.array();
-          var logs = msg.guild.channels.find("name", "mod_logs");
+          var logs = msg.guild.channels.find(chan => chan.name === "applications");
           const embed = new Discord.RichEmbed()
           .setColor(0x42f471)
           .setAuthor(`Application Completion | ${msg.author.tag}`, client.user.avatarURL)

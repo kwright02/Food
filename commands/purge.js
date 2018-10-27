@@ -10,7 +10,7 @@ module.exports = {
         if (count > 100 || count < 3) return await msg.channel.send("Please make sure your amount is between 2 and 100!");
         const deleted = await msg.channel.bulkDelete(count);
         const amount = deleted.size - 1;
-        let channel = msg.guild.channels.find('name', 'mod_logs');
+        let channel = msg.guild.channels.find(chan => chan.name === 'mod_logs');
         if (!channel) return;
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)

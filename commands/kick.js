@@ -10,7 +10,7 @@ module.exports = {
         if (!user.kickable) return await msg.channel.send("User cannot be kicked.");
         const reason = args.slice(1).join(" ");
         if (!reason) return msg.channel.send("Please provide a reason for the kick.");
-        let channel = user.guild.channels.find('name', 'mod_logs');
+        let channel = user.guild.channels.find(chan => chan.name === 'mod_logs');
         if (!channel) return;
         await msg.channel.send(`:white_check_mark: ***${user.user.tag}** has been kicked.*`);
         await user.kick(`${user.user.tag} has been kicked for '${reason}'`);

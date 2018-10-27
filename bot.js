@@ -18,11 +18,11 @@ client.on("error", (O_o) => {});
 
 client.on("guildMemberAdd", (user) => {
     let infoChannel = client.channels.get("420407754327457792");
-    let channel = user.guild.channels.find('name', 'welcome');
+    let channel = user.guild.channels.find(chan => chan.name === 'welcome');
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
-    var role = user.guild.roles.find('name', 'Members');
-    var role2 = user.guild.roles.find('name', 'Notify');
+    var role = user.guild.roles.find(role => role.name === 'Members');
+    var role2 = user.guild.roles.find(role => role.name === 'Notify');
     user.addRole(role);
     user.addRole(role2);
         var guilds = client.guilds.array();
@@ -43,7 +43,7 @@ client.on("guildMemberAdd", (user) => {
 });
 
 client.on("guildMemberRemove", (user) => {
-    let channel = user.guild.channels.find('name', 'leave');
+    let channel = user.guild.channels.find(chan => chan.name === 'leave');
     if (!channel) return;
     channel.send(`**${user.user.tag}** has left. We now have ${user.guild.memberCount} members`);
 });
@@ -54,7 +54,7 @@ if (oldMessage.content.length > 1000) return;
 if (oldMessage.author.bot) return;
 if (oldMessage.guild === null) return;
 if (newMessage.content === oldMessage.content) return;
-    let channel = oldMessage.guild.channels.find('name', 'action_logs');
+    let channel = oldMessage.guild.channels.find(chan => chan.name === 'action_logs');
     if (!channel) return;
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
@@ -71,7 +71,7 @@ if (dm.content.length < 1) return;
 if (dm.content.length > 1000) return;
 if (dm.author.bot) return;
 if (dm.guild === null) return;
-    let channel = dm.guild.channels.find('name', 'action_logs');
+    let channel = dm.guild.channels.find(chan => chan.name === 'action_logs');
     if (!channel) return;
     const entry = await dm.guild.fetchAuditLogs({type: 'MESSAGE_DELETE'}).then(audit => audit.entries.first());
     let deleter = ""
@@ -100,6 +100,13 @@ let random = cards[Math.floor(Math.random() * cards.length)];
 if (msg.author.bot) return;
 if (msg.content === "no u") {
 msg.channel.send("", {files: [random]})
+   }
+});
+
+client.on("message", msg => {
+if (msg.author.bot) return;
+if (msg.content === "STOP") {
+msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
    }
 });
 
@@ -146,39 +153,39 @@ client.on("messageReactionAdd", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
   const server = client.guilds.get("370562411973050368");
-  var notify = server.roles.find('name', 'Notify');
+  var notify = server.roles.find(role => role.name === 'Notify');
   if(reaction.emoji.name === "notify") member.removeRole(notify)
-  var sot = server.roles.find('name', 'Sea of Thieves');
+  var sot = server.roles.find(role => role.name === 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.addRole(sot)
-  var ark = server.roles.find('name', 'ARK');
+  var ark = server.roles.find(role => role.name === 'ARK');
   if(reaction.emoji.name === "ARK") member.addRole(ark)
-  var bh = server.roles.find('name', 'Brawlhalla');
+  var bh = server.roles.find(role => role.name === 'Brawlhalla');
   if(reaction.emoji.name === "Brawlhalla") member.addRole(bh)
-  var csgo = server.roles.find('name', 'CS:GO');
+  var csgo = server.roles.find(role => role.name === 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.addRole(csgo)
-  var ftn = server.roles.find('name', 'Fortnite');
+  var ftn = server.roles.find(role => role.name === 'Fortnite');
   if(reaction.emoji.name === "Fortnite") member.addRole(ftn)
-  var gmod = server.roles.find('name', 'Gmod');
+  var gmod = server.roles.find(role => role.name === 'Gmod');
   if(reaction.emoji.name === "Gmod") member.addRole(gmod)
-  var lol = server.roles.find('name', 'League of Legends');
+  var lol = server.roles.find(role => role.name === 'League of Legends');
   if(reaction.emoji.name === "LOL") member.addRole(lol)
-  var mc = server.roles.find('name', 'Minecraft');
+  var mc = server.roles.find(role => role.name === 'Minecraft');
   if(reaction.emoji.name === "Minecraft") member.addRole(mc)
-  var ow = server.roles.find('name', 'Overwatch');
+  var ow = server.roles.find(role => role.name === 'Overwatch');
   if(reaction.emoji.name === "Overwatch") member.addRole(ow)
-  var pd = server.roles.find('name', 'Payday');
+  var pd = server.roles.find(role => role.name === 'Payday');
   if(reaction.emoji.name === "Payday") member.addRole(pd)
-  var pubg = server.roles.find('name', 'PUBG');
+  var pubg = server.roles.find(role => role.name === 'PUBG');
   if(reaction.emoji.name === "PUBG") member.addRole(pubg)
-  var rl = server.roles.find('name', 'Rocket League');
+  var rl = server.roles.find(role => role.name === 'Rocket League');
   if(reaction.emoji.name === "RocketLeague") member.addRole(rl)
-  var r6 = server.roles.find('name', 'Rainbow Six Seige');
+  var r6 = server.roles.find(role => role.name === 'Rainbow Six Seige');
   if(reaction.emoji.name === "R6") member.addRole(r6)
-  var rb = server.roles.find('name', 'Roblox');
+  var rb = server.roles.find(role => role.name === 'Roblox');
   if(reaction.emoji.name === "Roblox") member.addRole(rb)
-  var ru = server.roles.find('name', 'Rust');
+  var ru = server.roles.find(role => role.name === 'Rust');
   if(reaction.emoji.name === "Rust") member.addRole(ru)
-  var un = server.roles.find('name', 'Unturned');
+  var un = server.roles.find(role => role.name === 'Unturned');
   if(reaction.emoji.name === "Unturned") member.addRole(un)
 });
 
@@ -186,39 +193,39 @@ client.on("messageReactionRemove", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
   const server = client.guilds.get("370562411973050368");
-  var notify = server.roles.find('name', 'Notify');
+  var notify = server.roles.find(role => role.name === 'Notify');
   if(reaction.emoji.name === "notify") member.addRole(notify)
-  var sot = server.roles.find('name', 'Sea of Thieves');
+  var sot = server.roles.find(role => role.name === 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.removeRole(sot)
-  var ark = server.roles.find('name', 'ARK');
+  var ark = server.roles.find(role => role.name === 'ARK');
   if(reaction.emoji.name === "ARK") member.removeRole(ark)
-  var bh = server.roles.find('name', 'Brawlhalla');
+  var bh = server.roles.find(role => role.name === 'Brawlhalla');
   if(reaction.emoji.name === "Brawlhalla") member.removeRole(bh)
-  var csgo = server.roles.find('name', 'CS:GO');
+  var csgo = server.roles.find(role => role.name === 'CS:GO');
   if(reaction.emoji.name === "CSGO") member.removeRole(csgo)
-  var ftn = server.roles.find('name', 'Fortnite');
+  var ftn = server.roles.find(role => role.name === 'Fortnite');
   if(reaction.emoji.name === "Fortnite") member.removeRole(ftn)
-  var gmod = server.roles.find('name', 'Gmod');
+  var gmod = server.roles.find(role => role.name === 'Gmod');
   if(reaction.emoji.name === "Gmod") member.removeRole(gmod)
-  var lol = server.roles.find('name', 'League of Legends');
+  var lol = server.roles.find(role => role.name === 'League of Legends');
   if(reaction.emoji.name === "LOL") member.removeRole(lol)
-  var mc = server.roles.find('name', 'Minecraft');
+  var mc = server.roles.find(role => role.name === 'Minecraft');
   if(reaction.emoji.name === "Minecraft") member.removeRole(mc)
-  var ow = server.roles.find('name', 'Overwatch');
+  var ow = server.roles.find(role => role.name === 'Overwatch');
   if(reaction.emoji.name === "Overwatch") member.removeRole(ow)
-  var pd = server.roles.find('name', 'Payday');
+  var pd = server.roles.find(role => role.name === 'Payday');
   if(reaction.emoji.name === "Payday") member.removeRole(pd)
-  var pubg = server.roles.find('name', 'PUBG');
+  var pubg = server.roles.find(role => role.name === 'PUBG');
   if(reaction.emoji.name === "PUBG") member.removeRole(pubg)
-  var rl = server.roles.find('name', 'Rocket League');
+  var rl = server.roles.find(role => role.name === 'Rocket League');
   if(reaction.emoji.name === "RocketLeague") member.removeRole(rl)
-  var r6 = server.roles.find('name', 'Rainbow Six Seige');
+  var r6 = server.roles.find(role => role.name === 'Rainbow Six Seige');
   if(reaction.emoji.name === "R6") member.removeRole(r6)
-  var rb = server.roles.find('name', 'Roblox');
+  var rb = server.roles.find(role => role.name === 'Roblox');
   if(reaction.emoji.name === "Roblox") member.removeRole(rb)
-  var ru = server.roles.find('name', 'Rust');
+  var ru = server.roles.find(role => role.name === 'Rust');
   if(reaction.emoji.name === "Rust") member.removeRole(ru)
-  var un = server.roles.find('name', 'Unturned');
+  var un = server.roles.find(role => role.name === 'Unturned');
   if(reaction.emoji.name === "Unturned") member.removeRole(un)
 });
 
@@ -234,7 +241,7 @@ client.on("message", (message) => {
     if(new RegExp(blacklist[i], "i").test(content)) {
       message.delete();
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
-      let channel = message.guild.channels.find('name', 'mod_logs');
+      let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
       if (!channel) return;
       const embed = new Discord.RichEmbed()
       .setColor(0x42f471)
@@ -252,7 +259,7 @@ client.on("message", (message) => {
    if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
     message.reply("please refrain from posting invite links.");
-    let channel = message.guild.channels.find('name', 'mod_logs');
+    let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
     if (!channel) return;
     const embed = new Discord.RichEmbed()
     .setColor(0x42f471)
