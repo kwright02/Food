@@ -5,8 +5,8 @@ let random = choices[Math.floor(Math.random()*choices.length)];
       msg.channel.send(random)
     },
     meta: {
-        name: 'coinflip',
-        description: 'Flip a coin',
+        name: 'rps',
+        description: 'Rock, paper, or scissors',
         usage: ''
     }
 }
