@@ -7,8 +7,8 @@ if(!ques) return msg.channel.send("Please ask a yes or no question.")
       msg.channel.send(random)
     },
     meta: {
-        name: 'coinflip',
-        description: 'Flip a coin',
+        name: '8ball',
+        description: 'The magic 8ball',
         usage: ''
     }
 }
