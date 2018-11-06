@@ -3,13 +3,13 @@
 module.exports = {
     run: async (client, msg, args) => {
     if (!args[0]) return msg.channel.send("Well\, you have to suggest something!");
-    let channel = client.channels.get("420411538449498113");
+    let channel = client.channels.get("509185141269200906");
     if (!channel) return;
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setDescription(args.join(" "))
         .setFooter(`User ID - ${msg.author.id}`);
-        client.channels.get("420411538449498113").createWebhook(msg.author.username, msg.author.avatarURL)
+        client.channels.get("509185141269200906").createWebhook(msg.author.username, msg.author.avatarURL)
         .then(wh => {
         wh.send(embed)
          .then(msg => {
