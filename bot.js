@@ -117,6 +117,13 @@ msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
    }
 });
 
+client.on("message", msg => {
+if (msg.author.bot) return;
+if (msg.content === "no homo") {
+msg.channel.send("yes homo")
+   }
+});
+
 let cooldown = new Set();
 let ctime = 30;
 
