@@ -4,6 +4,9 @@ const userinfo = require("../data/userinfo.json");
 
 module.exports = {
     run: async (client, msg, args) => {
+      const key = `${msg.author.id}`;
+      let curLvl = client.info.get(key, "level");
+      if(curLvl < 5) return msg.channel.send("You must be level 5 or above to apply.");
       sendSurvey(client, client.config.surveys.applywelcome, msg, "Welcomer Application");
     },
     meta: {
