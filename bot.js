@@ -270,6 +270,7 @@ client.on("message", (message) => {
     }
   }
    if(message.channel.id == "466125992986017804") return;
+   if(userinfo[message.guild.id]["members"][message.author.id]["permissions"].includes("administrate")) return;
    if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
     message.reply("please refrain from posting invite links.");
