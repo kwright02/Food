@@ -22,9 +22,7 @@ client.on("guildMemberAdd", (user) => {
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
     var role = user.guild.roles.find(role => role.name === 'Members');
-    var role2 = user.guild.roles.find(role => role.name === 'Notify');
     user.addRole(role);
-    user.addRole(role2);
         var guilds = client.guilds.array();
         for(var i = 0; i < guilds.length; i++) {
           if(!userinfo.hasOwnProperty(guilds[i].id)) {
@@ -167,8 +165,6 @@ client.on("messageReactionAdd", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
   const server = client.guilds.get("370562411973050368");
-  var notify = server.roles.find(role => role.name === 'Notify');
-  if(reaction.emoji.name === "notify") member.removeRole(notify)
   var sot = server.roles.find(role => role.name === 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.addRole(sot)
   var ark = server.roles.find(role => role.name === 'ARK');
@@ -207,8 +203,6 @@ client.on("messageReactionRemove", (reaction, user) => {
   if(reaction.message.channel.id != "460515586661679114") return;
   const member = reaction.message.guild.member(user);
   const server = client.guilds.get("370562411973050368");
-  var notify = server.roles.find(role => role.name === 'Notify');
-  if(reaction.emoji.name === "notify") member.addRole(notify)
   var sot = server.roles.find(role => role.name === 'Sea of Thieves');
   if(reaction.emoji.name === "SoT") member.removeRole(sot)
   var ark = server.roles.find(role => role.name === 'ARK');
