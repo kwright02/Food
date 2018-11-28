@@ -60,7 +60,7 @@ function sendSurvey(client, questSet, msg, survname) {
           var logs = msg.guild.channels.find(chan => chan.name === "applications");
           const embed = new Discord.RichEmbed()
           .setColor(0x42f471)
-          .setAuthor(`Application Completion | ${msg.author.tag}`, client.user.avatarURL)
+          .setAuthor(`Moderator Application | ${msg.author.tag}`, client.user.avatarURL)
           var counter2 = 1;
           for(var targQuest in collection) {
             embed.addField(targQuest, collection[targQuest], false);
