@@ -113,6 +113,14 @@ let admins3 = client.guilds.get("370562411973050368").roles.get("370564582449872
   console.log("Given \"points\" to " + a.user.tag);
 
 });
+let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041").members.forEach(d => {
+
+  if (userinfo["370562411973050368"]["members"][d.user.id]["permissions"].includes("administrate")) return;
+  userinfo["370562411973050368"]["members"][d.user.id]["permissions"].push("administrate");
+  saveInfo(userinfo, "./data/userinfo.json");
+  console.log("Given \"administrate\" to " + d.user.tag);
+
+});
   }
 }
 
