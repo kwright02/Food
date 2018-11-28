@@ -242,6 +242,7 @@ client.on("messageReactionRemove", (reaction, user) => {
 
 client.on("message", (message) => {
   if (message.author.bot) return;
+  if (!message.guild) return;
   var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content)) {
     message.delete();
@@ -267,6 +268,7 @@ client.on("message", (message) => {
     }
   }
    if(message.channel.id == "466125992986017804") return;
+   if(userinfo["370562411973050368"]["members"][message.author.id]["permissions"].includes("administrate")) return;
    if(userinfo[message.guild.id]["members"][message.author.id]["permissions"].includes("administrate")) return;
    if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
