@@ -19,8 +19,11 @@ client.on("error", (O_o) => {});
 client.on("guildMemberAdd", (user) => {
     let infoChannel = client.channels.get("420407754327457792");
     let channel = user.guild.channels.find(chan => chan.name === 'welcome');
+    let imgur = "https://i.imgur.com/eCA7xqc.png";
     if (!channel) return;
     channel.send(`:tada: Welcome to the United Federations of Food ${user.user}, you are member ${user.guild.memberCount}. Please read ${infoChannel} and enjoy your time here! :heart:`);
+    user.send(`**Welcome to UFF**\n**There are a few things I'd like you to know before you start chit-chatting with all of the pretty people.**\n**-** Read the channels in the "Server Information" category.\n**-** If you would like to apply for staff go to #bot-commands and type +applymod for moderator, +applypm for partner manager, and +applywelcome for welcomer.\n**-** We might have an awesome giveaway going on in #giveaways.\n**-** We have some sponsors. Kinguin and Stimpacks.\nUse code UFF at <https://stimpacks.com?utm_source=affiliate&utm_campaign=UFF> for 15% of on some delicious beef jerky.\nUse code UFF at <https://kinguin.net/?r=54545> for 3% on your next cheap game.\n\n**Have Fun!**`);
+    user.send("", {files: [imgur]})
     var role = user.guild.roles.find(role => role.name === 'Members');
     user.addRole(role);
         var guilds = client.guilds.array();
