@@ -8,7 +8,7 @@ module.exports = {
                 const commandFile = require(`../commands/${command}.js`);
                 commandFile.run(client, msg, args);
             } catch (err) {
-                if (err.toString().toLowerCase().includes('cannot find module')) return;       
+                if (err.toString().toLowerCase().includes('cannot find module')) return;
                 client.error(client, err.stack, `(Message Handler) Command Run`, `   Command: ${msg.content}\n   User: ${msg.author.tag} (${msg.author.id})`);
             }
         }

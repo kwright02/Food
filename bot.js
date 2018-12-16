@@ -81,7 +81,7 @@ if (dm.guild === null) return;
       && (entry.createdTimestamp > (Date.now() - 5000))
       && (entry.extra.count >= 1)) {
     deleter = entry.executor.username
-  } else { 
+  } else {
     deleter = dm.author.username
          }
         const embed = new Discord.RichEmbed()
@@ -99,30 +99,13 @@ client.on("message", msg => {
 let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
 let random = cards[Math.floor(Math.random() * cards.length)];
 if (msg.author.bot) return;
-if (msg.content === "no u") {
-msg.channel.send("", {files: [random]})
-   }
-});
-
-client.on("message", msg => {
-if (msg.author.bot) return;
 if (msg.content === "STOP") {
-msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
-   }
-});
-
-client.on("message", msg => {
-if (msg.author.bot) return;
-if (msg.content === "STOP") {
-msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
-   }
-});
-
-client.on("message", msg => {
-if (msg.author.bot) return;
-if (msg.content === "no homo") {
-msg.channel.send("yes homo")
-   }
+  msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
+} else if (msg.content === "no homo") {
+  msg.channel.send("yes homo")
+} else if (msg.content === "no u") {
+  msg.channel.send("", {files: [random]})
+}
 });
 
 let cooldown = new Set();
@@ -132,8 +115,7 @@ client.on("message", async msg => {
 const key = `${msg.author.id}`;
 if (msg.author.bot) return;
 if (cooldown.has(msg.author.id)) return;
-let member = msg.guild.member(msg.author);
-
+let member = msg.guild.members.get(msg.author.id);
 if(!client.info.get(`${msg.author.id}`)) {
    client.info.ensure(`${msg.author.id}`, {
       xp: 0,

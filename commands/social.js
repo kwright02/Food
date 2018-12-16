@@ -15,8 +15,8 @@ If you’re interested in sponsoring UFF, please contact an Admin or Higher
 ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––`)
 },
 meta: {
-    name: 'ship',
-    description: 'Ship 2 users',
+    name: 'social',
+    description: 'Get UFF social information',
     usage: ''
     }
  }
