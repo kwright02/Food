@@ -16,7 +16,7 @@ client.info = new Enmap({
 const blacklist = client.config.blacklist;
 
 client.on('ready', async () => {
-  setTimeout(timedXpVC, 6*1000);
+  setTimeout(timedXpVC, 60*1000);
 });
 
 function timedXpVC(){
