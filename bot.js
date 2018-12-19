@@ -26,13 +26,13 @@ function timedXpVC(){
       gen1.forEach(member => {
         const key = `${member.id}`;
         let curXp = client.info.get(key, "xp");
-        curXp += 5;
+        curXp += 60;
         client.info.set(key, curXp, "xp");
       });
       gen2.forEach(member => {
         const key = `${member.id}`;
         let curXp = client.info.get(key, "xp");
-        curXp += 5;
+        curXp += 60;
         client.info.set(key, curXp, "xp");
       });
       setTimeout(timedXpVC, 6*1000);
@@ -196,6 +196,7 @@ client.on("message", async msg => {
     cooldown.delete(msg.author.id)
   }, ctime * 1000);
 
+  var message = msg;
   var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
     message.delete();
