@@ -73,7 +73,7 @@ for(var i = 0; i < guilds.length; i++){
   }
   console.log("Added users to member list for guild: " + guilds[i].name);
 }
-saveInfo(userinfo, "./data/userinfo.json");
+saveInfo(userinfo, "../data/userinfo.json");
 
 let mods = client.guilds.get("370562411973050368").roles.get("413849966897790976").members.forEach(m => {
   if (!userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("moderate")){
@@ -83,7 +83,7 @@ let mods = client.guilds.get("370562411973050368").roles.get("413849966897790976
   if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 2){
     userinfo["370562411973050368"]["members"][m.user.id]["level"] = 2;
   }
-  saveInfo(userinfo, "./data/userinfo.json");
+  saveInfo(userinfo, "../data/userinfo.json");
 });
 let jrmods = client.guilds.get("370562411973050368").roles.get("510245054099619846").members.forEach(m => {
   if (userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("moderate")){
@@ -93,7 +93,7 @@ let jrmods = client.guilds.get("370562411973050368").roles.get("5102450540996198
   if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 1){
     userinfo["370562411973050368"]["members"][m.user.id]["level"] = 1;
   }
-  saveInfo(userinfo, "./data/userinfo.json");
+  saveInfo(userinfo, "../data/userinfo.json");
 });
 let admins = client.guilds.get("370562411973050368").roles.get("370564582449872896").members.forEach(a => {
   if (!userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("administrate")){
@@ -111,7 +111,7 @@ let admins = client.guilds.get("370562411973050368").roles.get("3705645824498728
   if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 3){
     userinfo["370562411973050368"]["members"][m.user.id]["level"] = 3;
   }
-  saveInfo(userinfo, "./data/userinfo.json");
+  saveInfo(userinfo, "../data/userinfo.json");
 });
 let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041").members.forEach(d => {
   if (userinfo["370562411973050368"]["members"][d.user.id]["permissions"].includes("administrate")){
@@ -121,7 +121,7 @@ let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041
   if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 4){
     userinfo["370562411973050368"]["members"][m.user.id]["level"] = 4;
   }
-  saveInfo(userinfo, "./data/userinfo.json");
+  saveInfo(userinfo, "../data/userinfo.json");
 });
 
   }
