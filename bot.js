@@ -25,7 +25,11 @@ function timedXpVC(){
   const gen2 = client.channels.get("370562412497207299").members;
       gen1.forEach(member => {
         const key = `${member.id}`;
+        do {
         let curXp = client.info.get(key, "xp");
+      } catch {
+        console.log("This key wasn't found: " + key);
+      }
         curXp += 60;
         client.info.set(key, curXp, "xp");
       });
@@ -59,7 +63,7 @@ client.on("guildMemberAdd", (user) => {
           var members = guilds[i].members.array();
           for(var j = 0; j < members.length; j++) {
             if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
-              userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[], "punishments":[], "applications": {} };
+              userinfo[guilds[i].id]["members"][members[j].user.id] = {"permissions":[],"level":0, "punishments":[],"lastmsgs":[], "applications": {},"muted":false};
               console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
             }
           }
@@ -150,7 +154,48 @@ client.on('messageReactionRemove', async (reaction, user) => {
 client.on("message", async msg => {
   let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
   let random = cards[Math.floor(Math.random() * cards.length)];
+  var message = msg;
+  var content = message.content;
+  let prev = userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"];
   if (msg.author.bot) return;
+  if(userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["muted"]){
+    message.delete();
+    let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
+    if (!channel) return;
+    const embed = new Discord.RichEmbed()
+    .setColor(0x42f471)
+    .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
+    .addField("User", `${message.author.tag}`, true)
+    .addField("Reason", "Chat while muted", true)
+    .addField("Content", `${message.content}`, true)
+    .setFooter("UFF Moderation")
+    .setTimestamp();
+    channel.send( {embed} );
+    return;
+  }
+  if(prev.length > 5){
+    if(prev[0] === prev[1] && prev[0] === prev[2] && prev[0] === prev[3] && prev[0] === prev[4]){
+      message.delete();
+      message.channel.send(`:white_check_mark: ***${message.author.tag}** has been muted.*`);
+      let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
+      if (!channel) return;
+      const embed = new Discord.RichEmbed()
+      .setColor(0x42f471)
+      .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
+      .addField("User", `${message.author.tag}`, true)
+      .addField("Reason", "Suspected Spam", true)
+      .addField("Content", `${message.content}`, true)
+      .setFooter("UFF Moderation")
+      .setTimestamp();
+      channel.send( {embed} );
+      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["muted"] = true;
+      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"] = [];
+    } else {
+      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"] = [];
+    }
+  } else {
+    userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"].append(msg.content);
+  }
   if (msg.content === "STOP") {
     msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
   } else if (msg.content === "no homo") {
@@ -196,8 +241,6 @@ client.on("message", async msg => {
     cooldown.delete(msg.author.id)
   }, ctime * 1000);
 
-  var message = msg;
-  var content = message.content;
   if(new RegExp(blacklist[0], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
     message.delete();
     message.channel.send(":white_check_mark: **Post Prevention Verification Successful...**");

@@ -67,7 +67,7 @@ for(var i = 0; i < guilds.length; i++){
   var members = guilds[i].members.array();
   for(var j = 0; j < members.length; j++){
     if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)){
-      userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[],"level":0, "punishments":[] };
+      userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[],"level":0, "punishments":[],"lastmsgs":[], "applications": {},"muted":false};
     }
   }
   console.log("Added users to member list for guild: " + guilds[i].name);
