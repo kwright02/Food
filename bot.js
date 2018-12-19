@@ -25,8 +25,9 @@ function timedXpVC(){
   const gen2 = client.channels.get("370562412497207299").members;
       gen1.forEach(member => {
         const key = `${member.id}`;
+        var curXp = 0;
       try {
-        let curXp = client.info.get(key, "xp");
+        curXp = client.info.get(key, "xp");
       } catch(err) {
         console.log("This key wasn't found: " + key);
       }
