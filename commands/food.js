@@ -20,7 +20,7 @@ let curDaily = client.info.get(key, "daily");
           client.info.set(key, curDaily, "daily");
           curPts = curPts + 10;
           client.info.set(key, curPts, "points");
-   const responses = ['Apple', 'Cake', 'Cookie', 'Shrimp', 'Lobster', 'Crab', 'Fish', 'Pop Corn', 'Cheese', 'Orange', 'Lemon', 'Banana', 'Garlic', 'Coconut', 'Avocado', 'Tofu', 'Tomato', 'Onion', 'Lentil', 'Carrot', 'Spinach', 'Cracker', 'Bread', 'Waffle', 'Pancake', 'Eggs', 'Tuna', 'Bacon', 'Lamb', 'Asparagus', 'Almond', 'Eggplant', 'Celery', 'Beans', 'Grapefruit', 'Pomegranate', 'Brussels Sprouts', 'Beef', 'Pork', 'Hotdog'] 
+   const responses = ['Apple', 'Cake', 'Cookie', 'Shrimp', 'Lobster', 'Crab', 'Fish', 'Pop Corn', 'Cheese', 'Orange', 'Lemon', 'Banana', 'Garlic', 'Coconut', 'Avocado', 'Tofu', 'Tomato', 'Onion', 'Lentil', 'Carrot', 'Spinach', 'Cracker', 'Bread', 'Waffle', 'Pancake', 'Eggs', 'Tuna', 'Bacon', 'Lamb', 'Asparagus', 'Almond', 'Eggplant', 'Celery', 'Beans', 'Grapefruit', 'Pomegranate', 'Brussels Sprouts', 'Beef', 'Pork', 'Hotdog']
    msg.channel.send(`You claimed your daily **10** Food Points and your food is **${responses[Math.floor(Math.random() * responses.length)]}**!`);
          } else {
          msg.channel.send("You can claim your daily again " + moment().endOf('day').fromNow())

@@ -7,12 +7,29 @@ const Enmap = require('enmap');
 client.config = require('./config.json');
 client.login(client.config.token);
 client.error = require('./error.js').run;
+
 client.info = new Enmap({
   name: "userinfo",
   autoFetch: true,
   fetchAll: false
 });
 const blacklist = client.config.blacklist;
+
+client.on('ready', async => (){
+  setTimeout(timedXpVC, 6*1000);
+});
+
+function timedXpVC(){
+  console.log("Looped for VC Xp reward");
+  const members = client.channels.get("524723337616818189").members;
+      members.forEach(member => {
+        const key = `${member.id}`;
+        let curXp = client.info.get(key, "xp");
+        curXp += 5;
+        client.info.set(key, curXp, "xp");
+      });
+      setTimeout(timedXpVC, 6*1000);
+}
 
 client.on("error", (O_o) => {});
 
@@ -95,57 +112,6 @@ if (dm.guild === null) return;
         channel.send( {embed} );
 });
 
-client.on("message", msg => {
-let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
-let random = cards[Math.floor(Math.random() * cards.length)];
-if (msg.author.bot) return;
-if (msg.content === "STOP") {
-  msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
-} else if (msg.content === "no homo") {
-  msg.channel.send("yes homo")
-} else if (msg.content === "no u") {
-  msg.channel.send("", {files: [random]})
-}
-});
-
-let cooldown = new Set();
-let ctime = 30;
-
-client.on("message", async msg => {
-const key = `${msg.author.id}`;
-if (msg.author.bot) return;
-if (cooldown.has(msg.author.id)) return;
-let member = msg.guild.members.get(msg.author.id);
-if(!client.info.get(`${msg.author.id}`)) {
-   client.info.ensure(`${msg.author.id}`, {
-      xp: 0,
-      level: 1,
-      points: 0,
-      daily: 0
- });
-}
-let curPts = client.info.get(key, "points");
-let curXp = client.info.get(key, "xp");
-let curLvl = client.info.get(key, "level");
-let nxtLvl = client.info.get(key, "level") * 300;
-let nxtPts = client.info.get(key, "level") * 5;
-curXp += 5;
-client.info.set(key, curXp, "xp");
-cooldown.add(msg.author.id);
-if (nxtLvl <= curXp) {
-   curLvl += 1;
-   client.info.set(key, curLvl, "level");
-   curXp = 0;
-   client.info.set(key, curXp, "xp");
-   curPts += nxtPts;
-   client.info.set(key, curPts, "points");
-    msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
-   }
- setTimeout(() => {
-  cooldown.delete(msg.author.id)
-}, ctime * 1000);
-});
-
 client.on('messageReactionAdd', async (reaction, user) => {
   if(reaction.message.channel.id === "446769808218783764"){
     try {
@@ -174,17 +140,64 @@ client.on('messageReactionRemove', async (reaction, user) => {
   }
 });
 
-client.on("message", (message) => {
-  if (message.author.bot) return;
-  if (!message.guild) return;
+client.on("message", async msg => {
+  let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
+  let random = cards[Math.floor(Math.random() * cards.length)];
+  if (msg.author.bot) return;
+  if (msg.content === "STOP") {
+    msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
+  } else if (msg.content === "no homo") {
+    msg.channel.send("yes homo")
+  } else if (msg.content === "no u") {
+    msg.channel.send("", {files: [random]})
+  }
+  });
+
+  let cooldown = new Set();
+  let ctime = 30;
+
+  const key = `${msg.author.id}`;
+  if (msg.author.bot) return;
+  if (cooldown.has(msg.author.id)) return;
+  let member = msg.guild.members.get(msg.author.id);
+  if(!client.info.get(`${msg.author.id}`)) {
+     client.info.ensure(`${msg.author.id}`, {
+        xp: 0,
+        level: 1,
+        points: 0,
+        daily: 0
+   });
+  }
+
+  let curPts = client.info.get(key, "points");
+  let curXp = client.info.get(key, "xp");
+  let curLvl = client.info.get(key, "level");
+  let nxtLvl = (client.info.get(key, "level")^3) * (1/300000);
+  let nxtPts = client.info.get(key, "level") * 5;
+  curXp += 5;
+  client.info.set(key, curXp, "xp");
+  cooldown.add(msg.author.id);
+  if (nxtLvl <= curXp) {
+     curLvl += 1;
+     client.info.set(key, curLvl, "level");
+     curXp = 0;
+     client.info.set(key, curXp, "xp");
+     curPts += nxtPts;
+     client.info.set(key, curPts, "points");
+      msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
+     }
+   setTimeout(() => {
+    cooldown.delete(msg.author.id)
+  }, ctime * 1000);
+
   var content = message.content;
-  if(new RegExp(blacklist[0], "i").test(content)) {
+  if(new RegExp(blacklist[0], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
     message.delete();
     message.channel.send(":white_check_mark: **Post Prevention Verification Successful...**");
     message.channel.send(":thumbsup: **Thank you**");
   }
   for(var i = 1; i < blacklist.length; i++) {
-    if(new RegExp(blacklist[i], "i").test(content)) {
+    if(new RegExp(blacklist[i], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
       message.delete();
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
       let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
@@ -202,7 +215,7 @@ client.on("message", (message) => {
     }
   }
    if(message.channel.id == "466125992986017804") return;
-   if(userinfo[message.guild.id]["members"][message.author.id]["permissions"].includes("administrate")) return;
+   if(userinfo[message.guild.id]["members"][message.author.id]["level"] < 3) return;
    if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
     message.reply("please refrain from posting invite links.");
