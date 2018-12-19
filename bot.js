@@ -178,7 +178,7 @@ client.on("message", async msg => {
   let curPts = client.info.get(key, "points");
   let curXp = client.info.get(key, "xp");
   let curLvl = client.info.get(key, "level");
-  let nxtLvl = (client.info.get(key, "level")^3) * (1/300000);
+  let nxtLvl = (client.info.get(key, "level") * 300);
   let nxtPts = client.info.get(key, "level") * 5;
   curXp += 5;
   client.info.set(key, curXp, "xp");
