@@ -69,7 +69,7 @@ client.on("guildMemberAdd", (user) => {
             }
           }
         }
-        saveInfo(userinfo, "./data/userinfo.json");
+        saveInfo(userinfo, "/data/userinfo.json");
 });
 
 client.on("guildMemberRemove", (user) => {
