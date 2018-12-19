@@ -16,7 +16,7 @@ client.info = new Enmap({
 const blacklist = client.config.blacklist;
 
 client.on('ready', async () => {
-  setTimeout(timedXpVC, 60*1000);
+  setTimeout(timedXpVC, 6*1000);
 });
 
 function timedXpVC(){
@@ -39,7 +39,7 @@ function timedXpVC(){
         curXp += 60;
         client.info.set(key, curXp, "xp");
       });
-      setTimeout(timedXpVC, 6*1000);
+      setTimeout(timedXpVC, 60*1000);
 }
 
 client.on("error", (O_o) => {});
