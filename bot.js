@@ -21,8 +21,15 @@ client.on('ready', async () => {
 
 function timedXpVC(){
   console.log("Looped for VC Xp reward");
-  const members = client.channels.get("524723337616818189").members;
-      members.forEach(member => {
+  const gen1 = client.channels.get("370562412497207299").members;
+  const gen2 = client.channels.get("370562412497207299").members;
+      gen1.forEach(member => {
+        const key = `${member.id}`;
+        let curXp = client.info.get(key, "xp");
+        curXp += 5;
+        client.info.set(key, curXp, "xp");
+      });
+      gen2.forEach(member => {
         const key = `${member.id}`;
         let curXp = client.info.get(key, "xp");
         curXp += 5;
