@@ -156,8 +156,8 @@ client.on("message", async msg => {
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
   var content = message.content;
-  let prev = userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"];
   if (msg.author.bot) return;
+  let prev = userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"];
   if(userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["muted"]){
     message.delete();
     let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
