@@ -1,17 +1,17 @@
 const userinfo = require("../data/userinfo.json");
-const fs = requite("fs");
-const Enmap require('enmap');
+const fs = require("fs");
+const Enmap = require('enmap');
 
 module.exports = {
   run: async (client) => {
-    console.console.log("Checking database status....");
+    .log("Checking database status....");
     if(client.info.isReady){
       console.log("\nDB Loaded!");
     } else {
       console.log("\nDB Not Loaded!");
     }
     console.log("Bot Loaded, Everything's good!");
-    var currentdate new Date();
+    var currentdate = new Date();
     var guilds = client.guilds.array();
     let logs = client.channels.find(chan => chan.name === "bot_logs");
     let hour = currentdate.getHours() + 3;
@@ -22,7 +22,6 @@ module.exports = {
     channel.send(`**React to this message to get the roles**\n
 **Other**
 Notify - ${server.emojis.get("460571176528511000")}
-
 **Games**
 ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
@@ -63,7 +62,7 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
 for(var i = 0; i < guilds.length; i++){
   if(!userinfo.hasOwnProperty(guilds[i].id)){
     userinfo[guilds[i].id] = {members:{}};
-    console.console.log("All user info was reset!");
+    console..log("All user info was reset!");
   }
   var members = guilds[i].members.array();
   for(var j = 0; j < members.length; j++){
@@ -108,8 +107,8 @@ let admins = client.guilds.get("370562411973050368").roles.get("3705645824498728
     userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("points");
     console.log("Given \"points\" to " + a.user.tag);
   }
-  if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 3){
-    userinfo["370562411973050368"]["members"][m.user.id]["level"] = 3;
+  if(!userinfo["370562411973050368"]["members"][a.user.id]["level"] != 3){
+    userinfo["370562411973050368"]["members"][a.user.id]["level"] = 3;
   }
   saveInfo(userinfo, "../data/userinfo.json");
 });
@@ -118,8 +117,8 @@ let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041
     userinfo["370562411973050368"]["members"][d.user.id]["permissions"].push("administrate");
     console.log("Given \"administrate\" to " + d.user.tag);
   }
-  if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 4){
-    userinfo["370562411973050368"]["members"][m.user.id]["level"] = 4;
+  if(!userinfo["370562411973050368"]["members"][d.user.id]["level"] != 4){
+    userinfo["370562411973050368"]["members"][d.user.id]["level"] = 4;
   }
   saveInfo(userinfo, "../data/userinfo.json");
 });
