@@ -15,7 +15,7 @@ client.info = new Enmap({
 });
 const blacklist = client.config.blacklist;
 
-client.on('ready', async => (){
+client.on('ready', async () => {
   setTimeout(timedXpVC, 6*1000);
 });
 
@@ -151,7 +151,6 @@ client.on("message", async msg => {
   } else if (msg.content === "no u") {
     msg.channel.send("", {files: [random]})
   }
-  });
 
   let cooldown = new Set();
   let ctime = 30;
@@ -249,4 +248,4 @@ function saveInfo(info, path) {
      console.log(error);
     }
   });
-};
+}
