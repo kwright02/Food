@@ -1,10 +1,12 @@
 const userinfo = require("../data/userinfo.json");
+const database = require("../database.js");
 const fs = require("fs");
 const Enmap = require('enmap');
 
 module.exports = {
   run: async (client) => {
     console.log("Checking database status....");
+    console.log();
     if(client.info.isReady){
       console.log("\nDB Loaded!");
     } else {
@@ -124,6 +126,20 @@ let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041
 });
 
   }
+}
+
+async function query(query) {
+  return new Promise(resolve => {
+    connection.query(query, function(error, result) {
+      if(error) {
+        console.error(error.message);
+      }
+      if(result.length > 0) {
+        return resolve(result[0]);
+      }
+      return resolve(false);
+    });
+  });
 }
 
 function saveInfo(info, path) {
