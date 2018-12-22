@@ -6,7 +6,7 @@ const Enmap = require('enmap');
 module.exports = {
   run: async (client) => {
     console.log("Checking database status....");
-    console.log();
+    console.log(query("SELECT * FROM user"));
     if(client.info.isReady){
       console.log("\nDB Loaded!");
     } else {
@@ -22,8 +22,6 @@ module.exports = {
     logs.send(":white_check_mark: Bot Online **("+ currentdate.getDay()+ "/"+ currentdate.getMonth()+ "/"+ currentdate.getFullYear()+ " - "+ hour+ ":"+ currentdate.getMinutes()+ " EST)**");
     channel.bulkDelete(10);
     channel.send(`**React to this message to get the roles**\n
-**Other**
-Notify - ${server.emojis.get("460571176528511000")}
 **Games**
 ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
