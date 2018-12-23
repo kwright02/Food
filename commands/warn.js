@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const userinfo = require("../data/userinfo.json");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
       if(!userinfo[msg.guild.id]["members"][msg.author.id]["permissions"].includes("moderate")) return msg.channel.send("You need the \`moderate\` permission to use this.");
        let user = msg.mentions.members.first();
         if (!user) user = msg.guild.members.get(args[0]);

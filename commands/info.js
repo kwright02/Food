@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
         const embed = new Discord.RichEmbed()
 .setAuthor(`Information about United Federations of Food`, msg.guild.iconURL)
 .addField("ID", `${msg.guild.id}`, true)

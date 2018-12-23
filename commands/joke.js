@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const request = require("snekfetch");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
         const res = await request.get("https://icanhazdadjoke.com/", {
             headers: {
                 Accept:"text/plain"

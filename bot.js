@@ -4,44 +4,48 @@ const userinfo = require("./data/userinfo.json");
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
 const Enmap = require('enmap');
+const sqlusr = require("./user.json");
+const connection = mysql.createConnection({
+      host: sqlusr.ip,
+      port: sqlusr.port,
+      user: sqlusr.username,
+      password: sqlusr.password,
+      database: "memberData"
+});
+const dutils = require("database.js");
 client.config = require('./config.json');
 client.login(client.config.token);
 client.error = require('./error.js').run;
 
-client.info = new Enmap({
-  name: "userinfo",
-  autoFetch: true,
-  fetchAll: false
-});
 const blacklist = client.config.blacklist;
 
-client.on('ready', async () => {
-  setTimeout(timedXpVC, 6*1000);
-});
-
-function timedXpVC(){
-  console.log("Looped for VC Xp reward");
-  const gen1 = client.channels.get("370562412497207299").members;
-  const gen2 = client.channels.get("370562412497207299").members;
-      gen1.forEach(member => {
-        const key = `${member.id}`;
-        var curXp = 0;
-      try {
-        curXp = client.info.get(key, "xp");
-      } catch(err) {
-        console.log("This key wasn't found: " + key);
-      }
-        curXp += 60;
-        client.info.set(key, curXp, "xp");
-      });
-      gen2.forEach(member => {
-        const key = `${member.id}`;
-        let curXp = client.info.get(key, "xp");
-        curXp += 60;
-        client.info.set(key, curXp, "xp");
-      });
-      setTimeout(timedXpVC, 60*1000);
-}
+// client.on('ready', async () => {
+//   setTimeout(timedXpVC, 6*1000);
+// });
+//
+// function timedXpVC(){
+//   const gen1 = client.channels.get("370562412497207299").members;
+//   const gen2 = client.channels.get("370562412497207299").members;
+//       gen1.forEach(member => {
+//         const key = `${member.id}`;
+//         var curXp = 0;
+//       try {
+//         curXp = options[(key, "xp");
+//       } catch(err) {
+//         console.log("This key wasn't found: " + key);
+//       }
+//         curXp += 60;
+//         client.info.set(key, curXp, "xp");
+//       });
+//       gen2.forEach(member => {
+//         const key = `${member.id}`;
+//         let curXp = options[(key, "xp");
+//         curXp += 60;
+//         client.info.set(key, curXp, "xp");
+//       });
+//       console.log("Looped for VC Xp reward. Rewarded " + (gen1.length + gen2.length) + " members.");
+//       setTimeout(timedXpVC, 60*1000);
+// }
 
 client.on("error", (O_o) => {});
 
@@ -55,21 +59,7 @@ client.on("guildMemberAdd", (user) => {
     user.send("", {files: [imgur]})
     var role = user.guild.roles.find(role => role.name === 'Members');
     user.addRole(role);
-        var guilds = client.guilds.array();
-        for(var i = 0; i < guilds.length; i++) {
-          if(!userinfo.hasOwnProperty(guilds[i].id)) {
-            userinfo[guilds[i].id] = { "members": {} };
-            console.log("All user information has been reset");
-          }
-          var members = guilds[i].members.array();
-          for(var j = 0; j < members.length; j++) {
-            if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)) {
-              userinfo[guilds[i].id]["members"][members[j].user.id] = {"permissions":[],"level":0, "punishments":[],"lastmsgs":[], "applications": {},"muted":false};
-              console.log("Added user " + members[j].user.tag  + " of id " + members[j].id + " to " + guilds[i].name + " userinfo members list");
-            }
-          }
-        }
-        saveInfo(userinfo, "/data/userinfo.json");
+    dutils.addMember(client, user, connection);
 });
 
 client.on("guildMemberRemove", (user) => {
@@ -157,46 +147,14 @@ client.on("message", async msg => {
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
   var content = message.content;
+  var options = dutils.getMemberOptions(client, msg.author.user, connection);
+  var permission = parseInt(dutils.getMemberPermission(client, msg.author, connection));
   if (msg.author.bot) return;
-  let prev = userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"];
-  if(userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["muted"]){
-    message.delete();
-    let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
-    if (!channel) return;
-    const embed = new Discord.RichEmbed()
-    .setColor(0x42f471)
-    .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
-    .addField("User", `${message.author.tag}`, true)
-    .addField("Reason", "Chat while muted", true)
-    .addField("Content", `${message.content}`, true)
-    .setFooter("UFF Moderation")
-    .setTimestamp();
-    channel.send( {embed} );
+  if(options["muted"]){
+    msg.author.send("You are attempting to chat whilst muted. Please wait until your mute is up.");
     return;
   }
-  if(prev.length > 5){
-    if(prev[0] === prev[1] && prev[0] === prev[2] && prev[0] === prev[3] && prev[0] === prev[4]){
-      message.delete();
-      message.channel.send(`:white_check_mark: ***${message.author.tag}** has been muted.*`);
-      let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
-      if (!channel) return;
-      const embed = new Discord.RichEmbed()
-      .setColor(0x42f471)
-      .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
-      .addField("User", `${message.author.tag}`, true)
-      .addField("Reason", "Suspected Spam", true)
-      .addField("Content", `${message.content}`, true)
-      .setFooter("UFF Moderation")
-      .setTimestamp();
-      channel.send( {embed} );
-      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["muted"] = true;
-      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"] = [];
-    } else {
-      userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"] = [];
-    }
-  } else {
-    userinfo[client.guilds.get("370562411973050368")]["members"][msg.author.id]["lastmsgs"].append(msg.content);
-  }
+
   if (msg.content === "STOP") {
     msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
   } else if (msg.content === "no homo") {
@@ -205,50 +163,30 @@ client.on("message", async msg => {
     msg.channel.send("", {files: [random]})
   }
 
-  let cooldown = new Set();
-  let ctime = 30;
-
-  const key = `${msg.author.id}`;
-  if (msg.author.bot) return;
-  if (cooldown.has(msg.author.id)) return;
-  let member = msg.guild.members.get(msg.author.id);
-  if(!client.info.get(`${msg.author.id}`)) {
-     client.info.ensure(`${msg.author.id}`, {
-        xp: 0,
-        level: 1,
-        points: 0,
-        daily: 0
-   });
-  }
-
-  let curPts = client.info.get(key, "points");
-  let curXp = client.info.get(key, "xp");
-  let curLvl = client.info.get(key, "level");
-  let nxtLvl = (client.info.get(key, "level") * 300);
-  let nxtPts = client.info.get(key, "level") * 5;
+  let curPts = options["points"];
+  let curXp = options["xp"];
+  let curLvl = options["level"];
+  let nxtLvl = options["level"] * 300;
+  let nxtPts = options["level"] * 5;
   curXp += 5;
-  client.info.set(key, curXp, "xp");
-  cooldown.add(msg.author.id);
   if (nxtLvl <= curXp) {
      curLvl += 1;
-     client.info.set(key, curLvl, "level");
      curXp = 0;
-     client.info.set(key, curXp, "xp");
      curPts += nxtPts;
-     client.info.set(key, curPts, "points");
-      msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`)
-     }
-   setTimeout(() => {
-    cooldown.delete(msg.author.id)
-  }, ctime * 1000);
+     msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`);
+  }
+  options["level"] = curLvl;
+  options["xp"] = curXp;
+  options["points"] = curPts;
+  dutils.updateMemberOptions(client, msg.author.user, options, connection);
 
-  if(new RegExp(blacklist[0], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
+  if(new RegExp(blacklist[0], "i").test(content) && permission < 3) {
     message.delete();
     message.channel.send(":white_check_mark: **Post Prevention Verification Successful...**");
     message.channel.send(":thumbsup: **Thank you**");
   }
   for(var i = 1; i < blacklist.length; i++) {
-    if(new RegExp(blacklist[i], "i").test(content) && (userinfo[message.guild.id]["members"][message.author.id]["level"] < 3)) {
+    if(new RegExp(blacklist[i], "i").test(content) && permission < 3) {
       message.delete();
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
       let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
@@ -265,9 +203,9 @@ client.on("message", async msg => {
       return;
     }
   }
-   if(message.channel.id == "466125992986017804") return;
-   if(userinfo[message.guild.id]["members"][message.author.id]["level"] < 3) return;
-   if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
+  if(message.channel.id == "466125992986017804") return;
+  if(permission > 3) return;
+  if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
     message.delete();
     message.reply("please refrain from posting invite links.");
     let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
@@ -290,14 +228,6 @@ fs.readdir('./events', (err, files) => {
     files.forEach(file => {
         const eventFunction = require(`./events/${file}`);
         const eventName = file.split('.')[0];
-        client.on(eventName, (...args) => eventFunction.run(client, ...args));
+        client.on(eventName, (...args) => eventFunction.run(client, connection, ...args));
     });
 });
-
-function saveInfo(info, path) {
-  fs.writeFile(path, JSON.stringify(info, null, " "), function (error) {
-    if (error) {
-     console.log(error);
-    }
-  });
-}

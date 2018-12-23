@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const request = require("snekfetch");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection,args) => {
         let res = await request.get("http://www.rrrather.com/botapi").send();
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)

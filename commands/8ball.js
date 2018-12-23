@@ -1,5 +1,5 @@
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
 let ques = args[0];
 let choices = ["Yes", "No", "It is certain", "Don't count on it", "Outlook good", "Outlook not so good", "Ask agian later"];
 let random = choices[Math.floor(Math.random()*choices.length)];

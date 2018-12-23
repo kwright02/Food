@@ -3,7 +3,7 @@ const fs = require("fs");
 const userinfo = require("../data/userinfo.json");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
       sendSurvey(client, client.config.surveys.applypm, msg, "Partner Manager Application");
     },
     meta: {

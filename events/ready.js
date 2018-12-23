@@ -1,18 +1,54 @@
 const userinfo = require("../data/userinfo.json");
-const database = require("../database.js");
 const fs = require("fs");
 const Enmap = require('enmap');
 
 module.exports = {
-  run: async (client) => {
-    console.log("Checking database status....");
-    console.log(query("SELECT * FROM user"));
-    if(client.info.isReady){
-      console.log("\nDB Loaded!");
-    } else {
-      console.log("\nDB Not Loaded!");
-    }
-    console.log("Bot Loaded, Everything's good!");
+  run: async (client, connection) => {
+    console.log(`[Log] Logged in as ${client.user.tag}!\nAttempting to reach database....`);
+    connection.connect(function(err){
+      if(err){
+        throw err;
+      } else {
+        console.log('\n[Log] Database connection. established!');
+      }
+    });
+      connection.query("CREATE DATABASE IF NOT EXISTS `memberData`;", async function(error, result) {
+        if(error) {
+          console.error(error.message);
+          return false;
+        }
+        console.log("[Log] Ensured database table was created for server");
+        return true;
+      });
+      connection.query("CREATE TABLE IF NOT EXISTS \`members\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`memberid\` TEXT(255), \`punishments\` TEXT(1000000000), \`options\` TEXT(10000) NOT NULL, \`permission\` INT(255) NOT NULL, PRIMARY KEY (\`id\`));", async function(error, result){
+        if(error) {
+          console.error(error.message);
+          return false;
+        }
+        console.log("[Log] Ensured database table \`members\` was created");
+        server.members.forEach(function(member){
+          connection.query("SELECT * FROM `members` WHERE memberid=\'" + member.id + "\'", function(err, result){
+            if(error) {
+              console.error(error.message);
+              return false;
+            }
+            if(result.length == 0){
+              connection.query("INSERT INTO `members` (`id`,`memberid`,`punishments`,`options`,`permission`) VALUES (0,\'" + member.id +"\',\'{}\',\'{\"muted\":false,\"developer\":false}\',0);", async function(error, result){
+                if(error) {
+                  console.error(error.message);
+                  return false;
+                }
+                console.log("[Members]" + member.user.username + " was created");
+                return true;
+              });
+            } else {
+              // var data = JSON.parse(result[0]["options"]); this is how to access json info for member
+              console.log("[Members] Validated user " + member.user.username + "(" + member.id +") in the database");
+            }
+          });
+        });
+        return true;
+      });
     var currentdate = new Date();
     var guilds = client.guilds.array();
     let logs = client.channels.find(chan => chan.name === "bot_logs");
@@ -59,91 +95,5 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
   msg.react(server.emojis.get("459931398938165249"))
   msg.react(server.emojis.get("473540641423622164"))
     });
-for(var i = 0; i < guilds.length; i++){
-  if(!userinfo.hasOwnProperty(guilds[i].id)){
-    userinfo[guilds[i].id] = {members:{}};
-    console.log("All user info was reset!");
-  }
-  var members = guilds[i].members.array();
-  for(var j = 0; j < members.length; j++){
-    if(!userinfo[guilds[i].id]["members"].hasOwnProperty(members[j].id)){
-      userinfo[guilds[i].id]["members"][members[j].user.id] = { "permissions":[],"level":0, "punishments":[],"lastmsgs":[], "applications": {},"muted":false};
-    }
-  }
-  console.log("Added users to member list for guild: " + guilds[i].name);
-}
-saveInfo(userinfo, "../data/userinfo.json");
-
-let mods = client.guilds.get("370562411973050368").roles.get("413849966897790976").members.forEach(m => {
-  if (!userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("moderate")){
-    userinfo["370562411973050368"]["members"][m.user.id]["permissions"].push("moderate");
-    console.log("Given \"moderate\" to " + m.user.tag);
-  }
-  if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 2){
-    userinfo["370562411973050368"]["members"][m.user.id]["level"] = 2;
-  }
-  saveInfo(userinfo, "../data/userinfo.json");
-});
-let jrmods = client.guilds.get("370562411973050368").roles.get("510245054099619846").members.forEach(m => {
-  if (userinfo["370562411973050368"]["members"][m.user.id]["permissions"].includes("moderate")){
-  userinfo["370562411973050368"]["members"][m.user.id]["permissions"].push("moderate");
-  console.log("Given \"moderate\" to " + m.user.tag);
-  }
-  if(!userinfo["370562411973050368"]["members"][m.user.id]["level"] != 1){
-    userinfo["370562411973050368"]["members"][m.user.id]["level"] = 1;
-  }
-  saveInfo(userinfo, "../data/userinfo.json");
-});
-let admins = client.guilds.get("370562411973050368").roles.get("370564582449872896").members.forEach(a => {
-  if (!userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("administrate")){
-    userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("administrate");
-    console.log("Given \"administrate\" to " + a.user.tag);
-  }
-  if (!userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("moderate")){
-    userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("moderate");
-    console.log("Given \"moderate\" to " + a.user.tag);
-  }
-  if (!userinfo["370562411973050368"]["members"][a.user.id]["permissions"].includes("points")){
-    userinfo["370562411973050368"]["members"][a.user.id]["permissions"].push("points");
-    console.log("Given \"points\" to " + a.user.tag);
-  }
-  if(!userinfo["370562411973050368"]["members"][a.user.id]["level"] != 3){
-    userinfo["370562411973050368"]["members"][a.user.id]["level"] = 3;
-  }
-  saveInfo(userinfo, "../data/userinfo.json");
-});
-let devs = client.guilds.get("370562411973050368").roles.get("515356277203927041").members.forEach(d => {
-  if (userinfo["370562411973050368"]["members"][d.user.id]["permissions"].includes("administrate")){
-    userinfo["370562411973050368"]["members"][d.user.id]["permissions"].push("administrate");
-    console.log("Given \"administrate\" to " + d.user.tag);
-  }
-  if(!userinfo["370562411973050368"]["members"][d.user.id]["level"] != 4){
-    userinfo["370562411973050368"]["members"][d.user.id]["level"] = 4;
-  }
-  saveInfo(userinfo, "../data/userinfo.json");
-});
-
   }
 }
-
-async function query(query) {
-  return new Promise(resolve => {
-    connection.query(query, function(error, result) {
-      if(error) {
-        console.error(error.message);
-      }
-      if(result.length > 0) {
-        return resolve(result[0]);
-      }
-      return resolve(false);
-    });
-  });
-}
-
-function saveInfo(info, path) {
-  fs.writeFile(path, JSON.stringify(info, null, " "), function (error) {
-    if (error) {
-     console.log(error);
-    }
-  });
-};

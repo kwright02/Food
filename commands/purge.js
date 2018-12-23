@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
         let member = msg.mentions.members.first();
         if (!msg.guild.me.hasPermission("MANAGE_MESSAGES")) return await msg.channel.send("SyncBOT does not have \`MANAGE_MESSAGES\` permission!");
         if (!msg.member.hasPermission("MANAGE_MESSAGES")) return await msg.channel.send("You do not have \`MANAGE_MESSAGES\` permission!");

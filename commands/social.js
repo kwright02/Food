@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
       var channel = msg.channel;
       channel.send(`––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
 :information_source: UFF Social Information :information_source:

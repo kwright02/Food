@@ -1,8 +1,8 @@
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
         const target = msg.mentions.users.first();
         if (!target) return msg.channel.send(msg.author.displayAvatarURL);
-        msg.channel.send(target.avatarURL);        
+        msg.channel.send(target.avatarURL);
     },
     meta: {
         name: 'avatar',

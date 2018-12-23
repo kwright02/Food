@@ -1,7 +1,7 @@
 ﻿const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
     if (!args[0]) return msg.channel.send("Well\, you have to suggest something!");
     let channel = client.channels.get("509185141269200906");
     if (!channel) return;

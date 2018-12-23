@@ -1,5 +1,5 @@
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
 let choices = ["Heads", "Tails"];
 let random = choices[Math.floor(Math.random()*choices.length)];
       msg.channel.send(random)

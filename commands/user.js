@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
    let member = msg.mentions.members.first();
 if (!member) {
  msg.channel.send({embed: new Discord.RichEmbed()

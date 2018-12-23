@@ -1,10 +1,10 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const userinfo = require("../data/userinfo.json");
+const dutils = require("../database.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
-      sendSurvey(client, client.config.surveys.applycc, msg, "Content Creator Application");
+    run: async (client, msg, connection, args) => {
+      sendSurvey(client, client.config.surveys.applycc, msg, connection, "Content Creator Application");
     },
     meta: {
         name: 'applycc',
@@ -13,7 +13,8 @@ module.exports = {
     }
 }
 
-function sendSurvey(client, questSet, msg, survname) {
+function sendSurvey(client, questSet, msg, connection, survname) {
+  var options = dutils(client, msg.author.user, connection);
   try {
     msg.author.send("**Requirements**\n\n- Must have 1,000+ followers.\n- Must stream at least once a week.\n- Must post your streams in #streams channel.\n- Must be an active member of UFF.\n\n*Do you meet this requirements?* `Y/N`").catch(e => {
       if(e) {

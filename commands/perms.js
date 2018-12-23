@@ -3,7 +3,7 @@ const userinfo = require("../data/userinfo.json");
 const fs = require("fs");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
      let user = msg.mentions.members.first();
       var channel = msg.channel;
       var members = msg.guild.members.array();

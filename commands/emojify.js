@@ -23,7 +23,7 @@ const mapping = {
 });
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
   if (args.length < 1) return msg.channel.send('Please provide some text to emojify.');
   if (args.length > 10) return msg.channel.send('You can only emojify 10 characters of text.');
   msg.channel.createWebhook(msg.author.username, msg.author.avatarURL)

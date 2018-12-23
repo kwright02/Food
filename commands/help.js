@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
         const help = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor("FoodBOT Commands", client.user.avatarURL)

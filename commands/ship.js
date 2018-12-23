@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    run: async (client, msg, args) => {
+    run: async (client, msg, connection, args) => {
 let user1 = args[0];
 if(!user1) return msg.reply("Please mention two users to ship!");
 let user2 = args[1];
