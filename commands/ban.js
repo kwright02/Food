@@ -1,4 +1,5 @@
 const Discord = require("discord.js");
+const dutils = require("../database.js");
 
 module.exports = {
     run: async (client, msg, connection, args) => {
@@ -12,6 +13,11 @@ module.exports = {
       if (!reason) return msg.channel.send("Please provide a reason for the ban.");
       let channel = user.guild.channels.find(chan => chan.name === 'mod_logs');
       if (!channel) return;
+      var punishment = dutils.getPunishmentTemplate(client, "Ban Command");
+      punishment["punished"] = user.id;
+      punishment["punisher"] = msg.authour.id;
+      punishment["reason"] = reason;
+      dutils.savePunisment(client, punishment, connection, "Ban Command");
       await msg.channel.send(`:white_check_mark: ***${user.user.tag}** has been banned.*`);
       await user.ban(`${user.user.tag} has been banned for '${reason}'`);
       const embed = new Discord.RichEmbed()

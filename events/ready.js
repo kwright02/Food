@@ -20,7 +20,7 @@ module.exports = {
         console.log("[Log] Ensured database table was created for server");
         return true;
       });
-      connection.query("CREATE TABLE IF NOT EXISTS \`members\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`memberid\` TEXT(255), \`punishments\` TEXT(1000000000), \`options\` TEXT(10000) NOT NULL, \`permission\` INT(255) NOT NULL, PRIMARY KEY (\`id\`));", async function(error, result){
+      connection.query("CREATE TABLE IF NOT EXISTS \`members\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`memberid\` TEXT(255), \`punishments\` TEXT(1000000000), \`options\` TEXT(10000) NOT NULL, \`permission\` INT(255) NOT NULL, \`reason\` TEXT(10000), PRIMARY KEY (\`id\`));", async function(error, result){
         if(error) {
           console.error(error.message);
           return false;
@@ -48,6 +48,13 @@ module.exports = {
           });
         });
         return true;
+      });
+      connection.query("CREATE TABLE IF NOT EXISTS \`punisments\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`punishedid\` TEXT(255),\`punisherid\` TEXT(255), \`punishment\` TEXT(1000000000), \`date\` TEXT(1000), PRIMARY KEY (\`id\`));", async function(error, result){
+        if(error) {
+          console.error(error.message);
+          return false;
+        }
+        console.log("[Log] Ensured database table \`punisments\` was created");
       });
     var currentdate = new Date();
     var guilds = client.guilds.array();

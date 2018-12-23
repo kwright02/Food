@@ -4,6 +4,8 @@ const fs = require("fs");
 
 module.exports = {
     run: async (client, msg, connection, args) => {
+      msg.channel.send("The stats command is under mantiencne, please refrain from it's use!");
+      return;
     const key = `${msg.author.id}`;
      let user = msg.mentions.members.first();
       var channel = msg.channel;

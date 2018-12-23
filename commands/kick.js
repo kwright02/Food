@@ -12,6 +12,11 @@ module.exports = {
         if (!reason) return msg.channel.send("Please provide a reason for the kick.");
         let channel = user.guild.channels.find(chan => chan.name === 'mod_logs');
         if (!channel) return;
+        var punishment = dutils.getPunishmentTemplate(client, "Kick Command");
+        punishment["punished"] = user.user.id;
+        punishment["punisher"] = msg.author.id;
+        punishment["reason"] = reason;
+        dutils.savePunisment(client, punishment, connection, "Kick Command");
         await msg.channel.send(`:white_check_mark: ***${user.user.tag}** has been kicked.*`);
         await user.kick(`${user.user.tag} has been kicked for '${reason}'`);
         const embed = new Discord.RichEmbed()

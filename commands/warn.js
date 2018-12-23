@@ -3,6 +3,8 @@ const userinfo = require("../data/userinfo.json");
 
 module.exports = {
     run: async (client, msg, connection, args) => {
+      msg.channel.send("The points command is under mantiencne, please refrain from it's use!");
+      return;
       if(!userinfo[msg.guild.id]["members"][msg.author.id]["permissions"].includes("moderate")) return msg.channel.send("You need the \`moderate\` permission to use this.");
        let user = msg.mentions.members.first();
         if (!user) user = msg.guild.members.get(args[0]);
@@ -12,6 +14,11 @@ module.exports = {
         let channel = user.guild.channels.find(chan => chan.name === 'mod_logs');
         if (!channel) return;
         if (!reason) return msg.channel.send("Please provide a reason for the warn.");
+        var punishment = dutils.getPunishmentTemplate(client, "Warn Command");
+        punishment["punished"] = user.user.id;
+        punishment["punisher"] = msg.author.id;
+        punishment["reason"] = reason;
+        dutils.savePunisment(client, punishment, connection, "Warn Command");
         const embed = new Discord.RichEmbed()
         .setColor(0x42f471)
         .setAuthor(`Warn | ${user.user.tag}`, client.user.avatarURL)

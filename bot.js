@@ -59,7 +59,7 @@ client.on("guildMemberAdd", (user) => {
     user.send("", {files: [imgur]})
     var role = user.guild.roles.find(role => role.name === 'Members');
     user.addRole(role);
-    dutils.addMember(client, user, connection);
+    dutils.addMember(client, user, connection,, "Member Registrar");
 });
 
 client.on("guildMemberRemove", (user) => {
@@ -147,8 +147,8 @@ client.on("message", async msg => {
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
   var content = message.content;
-  var options = dutils.getMemberOptions(client, msg.author.user, connection);
-  var permission = parseInt(dutils.getMemberPermission(client, msg.author, connection));
+  var options = dutils.getMemberOptions(client, msg.author.user, connection, "Message Handler");
+  var permission = parseInt(dutils.getMemberPermission(client, msg.author, connection, "Message Handler"));
   if (msg.author.bot) return;
   if(options["muted"]){
     msg.author.send("You are attempting to chat whilst muted. Please wait until your mute is up.");
@@ -178,7 +178,7 @@ client.on("message", async msg => {
   options["level"] = curLvl;
   options["xp"] = curXp;
   options["points"] = curPts;
-  dutils.updateMemberOptions(client, msg.author.user, options, connection);
+  dutils.updateMemberOptions(client, msg.author.user, options, connection, "Message Handler");
 
   if(new RegExp(blacklist[0], "i").test(content) && permission < 3) {
     message.delete();
@@ -191,11 +191,17 @@ client.on("message", async msg => {
       message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
       let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
       if (!channel) return;
+      const reason = "Blacklisted Phrase";
+      var punishment = dutils.getPunishmentTemplate(client, "Food Auto Warn");
+      punishment["punished"] = msg.author.id;
+      punishment["punisher"] = client.id;
+      punishment["reason"] = reason;
+      dutils.savePunisment(client, punishment, connection, "Food Auto Warn");
       const embed = new Discord.RichEmbed()
       .setColor(0x42f471)
       .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
       .addField("User", `${message.author.tag}`, true)
-      .addField("Reason", "Blacklisted Phrase", true)
+      .addField("Reason", reason, true)
       .addField("Content", `${message.content}`, true)
       .setFooter("UFF Moderation")
       .setTimestamp();
@@ -210,11 +216,17 @@ client.on("message", async msg => {
     message.reply("please refrain from posting invite links.");
     let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
     if (!channel) return;
+    const reason = "Unapproved Advertisement";
+    var punishment = dutils.getPunishmentTemplate(client, "Food Auto Warn");
+    punishment["punished"] = msg.author.id;
+    punishment["punisher"] = client.id;
+    punishment["reason"] = reason;
+    dutils.savePunisment(client, punishment, connection, "Food Auto Warn");
     const embed = new Discord.RichEmbed()
     .setColor(0x42f471)
     .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
     .addField("User", `${message.author.tag}`, true)
-    .addField("Reason", `Unapproved Advertisement`, true)
+    .addField("Reason", reason, true)
     .addField("Content", `${message.content}`, true)
     .setFooter('UFF Moderation')
     .setTimestamp();
