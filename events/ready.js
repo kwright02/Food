@@ -1,60 +1,79 @@
-const userinfo = require("../data/userinfo.json");
+const config = require("../data/userinfo.json");
 const fs = require("fs");
 const Enmap = require('enmap');
 
 module.exports = {
   run: async (client, connection) => {
     console.log(`[Log] Logged in as ${client.user.tag}!\nAttempting to reach database....`);
+    //Connect to database
     connection.connect(function(err){
       if(err){
         throw err;
+        return;
       } else {
         console.log('\n[Log] Database connection. established!');
+        return;
       }
     });
-      connection.query("CREATE DATABASE IF NOT EXISTS `memberData`;", async function(error, result) {
-        if(error) {
-          console.error(error.message);
-          return false;
-        }
-        console.log("[Log] Ensured database table was created for server");
-        return true;
-      });
-      connection.query("CREATE TABLE IF NOT EXISTS \`members\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`memberid\` TEXT(255), \`punishments\` TEXT(1000000000), \`options\` TEXT(10000) NOT NULL, \`permission\` INT(255) NOT NULL, \`reason\` TEXT(10000), PRIMARY KEY (\`id\`));", async function(error, result){
+    //Make sure memberData exists
+    connection.query("CREATE DATABASE IF NOT EXISTS `memberData`;", async function(error, result) {
+      if(error) {
+        console.error(error.message);
+        return false;
+      }
+      console.log("[Log] Ensured database table was created for server");
+      return true;
+    });
+    //Make sure members exists
+    connection.query("CREATE TABLE IF NOT EXISTS \`members\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`memberid\` TEXT(255), \`punishments\` TEXT(1000000000), \`options\` TEXT(10000) NOT NULL, \`permission\` INT(255) NOT NULL, PRIMARY KEY (\`id\`));", async function(error, result){
         if(error) {
           console.error(error.message);
           return false;
         }
         console.log("[Log] Ensured database table \`members\` was created");
-        server.members.forEach(function(member){
-          connection.query("SELECT * FROM `members` WHERE memberid=\'" + member.id + "\'", function(err, result){
-            if(error) {
-              console.error(error.message);
-              return false;
-            }
-            if(result.length == 0){
-              connection.query("INSERT INTO `members` (`id`,`memberid`,`punishments`,`options`,`permission`) VALUES (0,\'" + member.id +"\',\'{}\',\'{\"muted\":false,\"developer\":false}\',0);", async function(error, result){
+        return true;
+      });
+      //Grab all members for validation
+      connection.query("SELECT memberid FROM members;", async function(error, result){
+        if(error) {
+          console.error(error.message);
+          return null;
+        }
+        var current = JSON.parse(JSON.stringify(result));
+        //Loop over each server the bot is in
+        client.guilds.forEach(async function(server){
+          //Loop over each member in the current server
+          server.members.forEach(async function(member){
+            var created = false;
+            for(var i = 0; i < current.length; i += 1){
+                if(current[i]["memberid"] === member.id){
+                  console.log("[Member Validation -> " + server.name + " -> Log] Validated user " + member.user.username + "(" + member.id +") in the database");
+                  created = true;
+                  break;
+                }
+              }
+            if(!created){
+              await connection.query("INSERT INTO `members` (`id`,`memberid`,`punishments`,`options`,`permission`) VALUES (0,\'" + member.id +"\',\'{}\',\'{\"muted\":false,\"developer\":false,\"curXp\":0,\"curLvl\":0,\"curPts\":0}\',0);", async function(error, result){
                 if(error) {
                   console.error(error.message);
                   return false;
                 }
-                console.log("[Members]" + member.user.username + " was created");
+                console.log("[Member Validation -> " + server.name + " -> Member Management -> Log]" + member.user.username + " was created");
                 return true;
               });
-            } else {
-              // var data = JSON.parse(result[0]["options"]); this is how to access json info for member
-              console.log("[Members] Validated user " + member.user.username + "(" + member.id +") in the database");
             }
+            return true;
           });
         });
         return true;
       });
-      connection.query("CREATE TABLE IF NOT EXISTS \`punisments\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`punishedid\` TEXT(255),\`punisherid\` TEXT(255), \`punishment\` TEXT(1000000000), \`date\` TEXT(1000), PRIMARY KEY (\`id\`));", async function(error, result){
+      //Make sure punishments exists
+      connection.query("CREATE TABLE IF NOT EXISTS \`punishments\` (\`id\` INT NOT NULL AUTO_INCREMENT,\`punishedid\` TEXT(255),\`punisherid\` TEXT(255), \`punishment\` TEXT(1000000000), \`date\` TEXT(1000), PRIMARY KEY (\`id\`));", async function(error, result){
         if(error) {
           console.error(error.message);
           return false;
         }
-        console.log("[Log] Ensured database table \`punisments\` was created");
+        console.log("[Log] Ensured database table \`punishments\` was created");
       });
     var currentdate = new Date();
     var guilds = client.guilds.array();
@@ -64,7 +83,7 @@ module.exports = {
     let channel = client.channels.find(chan => chan.name === "roles");
     logs.send(":white_check_mark: Bot Online **("+ currentdate.getDay()+ "/"+ currentdate.getMonth()+ "/"+ currentdate.getFullYear()+ " - "+ hour+ ":"+ currentdate.getMinutes()+ " EST)**");
     channel.bulkDelete(10);
-    channel.send(`**React to this message to get the roles**\n
+    /*channel.send(`**React to this message to get the roles**\n
 **Games**
 ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
@@ -101,6 +120,6 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
   msg.react(server.emojis.get("459936871355645962"))
   msg.react(server.emojis.get("459931398938165249"))
   msg.react(server.emojis.get("473540641423622164"))
-    });
+});*/
   }
 }

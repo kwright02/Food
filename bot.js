@@ -1,51 +1,78 @@
 const { Client } = require('discord.js');
 const Discord = require("discord.js");
-const userinfo = require("./data/userinfo.json");
+const mysql = require("mysql");
 const client = new Client({ disableEveryone: true});
 const fs = require('fs');
-const Enmap = require('enmap');
 const sqlusr = require("./user.json");
 const connection = mysql.createConnection({
       host: sqlusr.ip,
       port: sqlusr.port,
       user: sqlusr.username,
       password: sqlusr.password,
-      database: "memberData"
+      database: sqlusr.database
 });
-const dutils = require("database.js");
+const dutils = require("./database.js");
 client.config = require('./config.json');
 client.login(client.config.token);
 client.error = require('./error.js').run;
 
 const blacklist = client.config.blacklist;
 
-// client.on('ready', async () => {
-//   setTimeout(timedXpVC, 6*1000);
-// });
-//
-// function timedXpVC(){
-//   const gen1 = client.channels.get("370562412497207299").members;
-//   const gen2 = client.channels.get("370562412497207299").members;
-//       gen1.forEach(member => {
-//         const key = `${member.id}`;
-//         var curXp = 0;
-//       try {
-//         curXp = options[(key, "xp");
-//       } catch(err) {
-//         console.log("This key wasn't found: " + key);
-//       }
-//         curXp += 60;
-//         client.info.set(key, curXp, "xp");
-//       });
-//       gen2.forEach(member => {
-//         const key = `${member.id}`;
-//         let curXp = options[(key, "xp");
-//         curXp += 60;
-//         client.info.set(key, curXp, "xp");
-//       });
-//       console.log("Looped for VC Xp reward. Rewarded " + (gen1.length + gen2.length) + " members.");
-//       setTimeout(timedXpVC, 60*1000);
-// }
+client.on('ready', async () => {
+  setInterval(timedXpVC, 60*1000);
+});
+
+function timedXpVC(){
+  const gen1 = client.channels.get("370562412497207299").members;
+  const gen2 = client.channels.get("452693215980683266").members;
+      gen1.forEach(function(member){
+        dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
+            var options = JSON.parse(opts);
+            var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
+            if((options.curLvl * 150) >= options.curLvl){
+              options.curXp = 0;
+              options.curLvl += 1;
+              options.curPts += options.curLvl*5;
+              const embed = new Discord.RichEmbed()
+              .setColor(0xD042F4)
+              .setAuthor(`Automated Message | ${member.user.tag}`, client.user.avatarURL)
+              .addField("User", `${member.user.tag}`, true)
+              .addField("Reason", `You leveled up to level ${options.curLvl} and gained ${options.curLvl*5} points!`, true)
+              .setFooter("Food Bot | v1.2")
+              .setTimestamp();
+              channel.send( {embed} );
+            } else {
+                options.curXp += 60;
+            }
+            var stropts = JSON.stringify(options);
+            dutils.updateMemberOptions(client, member.user, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Activity Rewards");
+        });
+      });
+      gen2.forEach(function(member){
+        dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
+            var options = JSON.parse(opts);
+            var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
+            if((options.curLvl * 150) >= options.curLvl){
+              options.curXp = 0;
+              options.curLvl += 1;
+              options.curPts += options.curLvl*5;
+              const embed = new Discord.RichEmbed()
+              .setColor(0xD042F4)
+              .setAuthor(`Automated Message | ${member.user.tag}`, client.user.avatarURL)
+              .addField("User", `${member.user.tag}`, true)
+              .addField("Reason", `You leveled up to level ${options.curLvl} and gained ${options.curLvl*5} points!`, true)
+              .setFooter("Food Bot | v1.2")
+              .setTimestamp();
+              channel.send( {embed} );
+            } else {
+                options.curXp += 60;
+            }
+            var stropts = JSON.stringify(options);
+            dutils.updateMemberOptions(client, member.user, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Activity Rewards");
+        });
+      });
+      console.log("Looped for VC Xp reward. Rewarded " + (gen1.length + gen2.length) + " members.");
+}
 
 client.on("error", (O_o) => {});
 
@@ -59,7 +86,7 @@ client.on("guildMemberAdd", (user) => {
     user.send("", {files: [imgur]})
     var role = user.guild.roles.find(role => role.name === 'Members');
     user.addRole(role);
-    dutils.addMember(client, user, connection,, "Member Registrar");
+    dutils.addMember(client, user, connection, "Member Registrar");
 });
 
 client.on("guildMemberRemove", (user) => {
@@ -143,17 +170,118 @@ client.on('messageReactionRemove', async (reaction, user) => {
 });
 
 client.on("message", async msg => {
+  if (msg.author.bot) return;
+  if(msg.channel.name !== "bot_testing") return;
   let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
   var content = message.content;
-  var options = dutils.getMemberOptions(client, msg.author.user, connection, "Message Handler");
-  var permission = parseInt(dutils.getMemberPermission(client, msg.author, connection, "Message Handler"));
-  if (msg.author.bot) return;
-  if(options["muted"]){
-    msg.author.send("You are attempting to chat whilst muted. Please wait until your mute is up.");
-    return;
-  }
+  dutils.getMemberOptions(client, msg.author, connection, "Message Handler").then(function(opts){
+    dutils.getMemberPermission(client, msg.author, connection, "Message Handler").then(function(permission){
+        // console.log('Permission: ' + permission);
+        var options = JSON.parse(opts);//{"muted":true,"developer":false,"curXp":0,"curLvl":0,"curPts":0}
+        // console.log('Options: ' + options);
+        console.log
+        if(options["muted"]){
+          msg.delete();
+          const embed = new Discord.RichEmbed()
+          .setColor(0xD042F4)
+          .setAuthor(`Automated Message | ${message.author.tag}`, client.user.avatarURL)
+          .addField("User", `${message.author.tag}`, true)
+          .addField("Reason", `Attempting to chat whilst muted. Please wait out your mute.`, true)
+          .addField("Content", `${message.content}`, true)
+          .setFooter("Food Bot | v1.2")
+          .setTimestamp();
+          msg.author.send( {embed} );
+          msg.channel.guild.channels.find(chan => chan.name === "mod_logs").send( {embed} );
+          console.log('\n[Message Handling -> Member Management -> Log] Told user ' + msg.author.username + ' to wait out their mute!');
+          return;
+        }
+
+        let curPts = options["curPts"];
+        let curXp = options["curXp"];
+        let curLvl = options["curLvl"];
+        let nxtLvl = options["curLvl"] * 150;
+        curXp += 5;
+        if (nxtLvl <= curXp) {
+           curLvl += 1;
+           nxtPts = curLvl*5;
+           curPts += nxtPts;
+           const embed = new Discord.RichEmbed()
+           .setColor(0xD042F4)
+           .setAuthor(`Automated Message | ${message.author.tag}`, client.user.avatarURL)
+           .addField("User", `${message.author.tag}`, true)
+           .addField("Reason", `You leveled up to level ${curLvl} and gained ${nxtPts} points!`, true)
+           .setFooter("Food Bot | v1.2")
+           .setTimestamp();
+           msg.channel.send( {embed} );
+        }
+        options["curXp"] = curXp;
+        options["curLvl"] = curLvl;
+        options["curPts"] = curPts;
+        var stropts = JSON.stringify(options);
+        // msg.channel.send("Hey, look at these options: " + stropts);
+        // console.log("After Options: " + stropts);
+        //Finished Xp Handling
+        //BEGIN PUNISHMENT HANDLING
+        if(new RegExp(blacklist[0], "i").test(content) && permission < 3) {
+          message.delete();
+          message.channel.send(":white_check_mark: **Post Prevention Verification Successful...**");
+          message.channel.send(":thumbsup: **Thank you**");
+        }
+        for(var i = 1; i < blacklist.length; i++) {
+          if(new RegExp(blacklist[i], "i").test(content) && permission < 3) {
+            message.delete();
+            message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
+            let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
+            if (!channel) return;
+            const reason = "Blacklisted Phrase";
+            var punishment = `{"punished":${user.user.id},"punisher":${msg.author.id},"reason":${reason}}`;
+            dutils.savePunisment(client, JSON.stringify(punishment).replace("\"{", "{").replace("\"}", "}"), user.user.id, msg.author.id, connection, "Message Handler -> Food Auto Warn");
+            const embed = new Discord.RichEmbed()
+            .setColor(0x42f471)
+            .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
+            .addField("User", `${message.author.tag}`, true)
+            .addField("Reason", reason, true)
+            .addField("Content", `${message.content}`, true)
+            .setFooter("UFF Moderation")
+            .setTimestamp();
+            channel.send( {embed} );
+            return;
+          }
+        }
+        if(message.channel.id == "466125992986017804") return;
+        if(permission > 3) return;
+        if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
+          message.delete();
+          message.reply("please refrain from posting invite links.");
+          let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
+          if (!channel) return;
+          const reason = "Unapproved Advertisement";
+          var punishment = `{"punished":${user.user.id},"punisher":${msg.author.id},"reason":${reason}}`;
+          dutils.savePunisment(client, JSON.stringify(punishment).replace("\"{", "{").replace("\"}", "}"), user.user.id, msg.author.id, connection, "Message Handler -> Food Auto Warn");
+          const embed = new Discord.RichEmbed()
+          .setColor(0x42f471)
+          .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
+          .addField("User", `${message.author.tag}`, true)
+          .addField("Reason", reason, true)
+          .addField("Content", `${message.content}`, true)
+          .setFooter('UFF Moderation')
+          .setTimestamp();
+          channel.send( {embed} );
+          return;
+        }
+        //END PUNISHMENT HANDLING
+        dutils.updateMemberOptions(client, msg.author, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Message Handler -> Xp Handling");
+        //send updated member options LAST
+
+    }).catch(function(error){
+      throw error;
+    });
+  }).catch(function(error){
+    throw error;
+  });
+return;
 
   if (msg.content === "STOP") {
     msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
@@ -161,77 +289,6 @@ client.on("message", async msg => {
     msg.channel.send("yes homo")
   } else if (msg.content === "no u") {
     msg.channel.send("", {files: [random]})
-  }
-
-  let curPts = options["points"];
-  let curXp = options["xp"];
-  let curLvl = options["level"];
-  let nxtLvl = options["level"] * 300;
-  let nxtPts = options["level"] * 5;
-  curXp += 5;
-  if (nxtLvl <= curXp) {
-     curLvl += 1;
-     curXp = 0;
-     curPts += nxtPts;
-     msg.reply(`you have leveled up to level ${curLvl}! Your prize is ${nxtPts} Food Points!`);
-  }
-  options["level"] = curLvl;
-  options["xp"] = curXp;
-  options["points"] = curPts;
-  dutils.updateMemberOptions(client, msg.author.user, options, connection, "Message Handler");
-
-  if(new RegExp(blacklist[0], "i").test(content) && permission < 3) {
-    message.delete();
-    message.channel.send(":white_check_mark: **Post Prevention Verification Successful...**");
-    message.channel.send(":thumbsup: **Thank you**");
-  }
-  for(var i = 1; i < blacklist.length; i++) {
-    if(new RegExp(blacklist[i], "i").test(content) && permission < 3) {
-      message.delete();
-      message.channel.send(`:white_check_mark: ***${message.author.tag}** has been warned.*`);
-      let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
-      if (!channel) return;
-      const reason = "Blacklisted Phrase";
-      var punishment = dutils.getPunishmentTemplate(client, "Food Auto Warn");
-      punishment["punished"] = msg.author.id;
-      punishment["punisher"] = client.id;
-      punishment["reason"] = reason;
-      dutils.savePunisment(client, punishment, connection, "Food Auto Warn");
-      const embed = new Discord.RichEmbed()
-      .setColor(0x42f471)
-      .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
-      .addField("User", `${message.author.tag}`, true)
-      .addField("Reason", reason, true)
-      .addField("Content", `${message.content}`, true)
-      .setFooter("UFF Moderation")
-      .setTimestamp();
-      channel.send( {embed} );
-      return;
-    }
-  }
-  if(message.channel.id == "466125992986017804") return;
-  if(permission > 3) return;
-  if(/discord\.gg\//.test(content) || /\.gg\/[a-zA-Z0-9]/.test(content)) {
-    message.delete();
-    message.reply("please refrain from posting invite links.");
-    let channel = message.guild.channels.find(chan => chan.name === 'mod_logs');
-    if (!channel) return;
-    const reason = "Unapproved Advertisement";
-    var punishment = dutils.getPunishmentTemplate(client, "Food Auto Warn");
-    punishment["punished"] = msg.author.id;
-    punishment["punisher"] = client.id;
-    punishment["reason"] = reason;
-    dutils.savePunisment(client, punishment, connection, "Food Auto Warn");
-    const embed = new Discord.RichEmbed()
-    .setColor(0x42f471)
-    .setAuthor(`Automated Warn | ${message.author.tag}`, client.user.avatarURL)
-    .addField("User", `${message.author.tag}`, true)
-    .addField("Reason", reason, true)
-    .addField("Content", `${message.content}`, true)
-    .setFooter('UFF Moderation')
-    .setTimestamp();
-    channel.send( {embed} );
-    return;
   }
 });
 
