@@ -29,7 +29,7 @@ function timedXpVC(){
         dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
             var options = JSON.parse(opts);
             var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
-            if((options.curLvl * 150) >= options.curLvl){
+            if((options.curLvl * 150) <= options.curLvl){
               options.curXp = 0;
               options.curLvl += 1;
               options.curPts += options.curLvl*5;
@@ -52,7 +52,7 @@ function timedXpVC(){
         dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
             var options = JSON.parse(opts);
             var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
-            if((options.curLvl * 150) >= options.curLvl){
+            if((options.curLvl * 150) <= options.curLvl){
               options.curXp = 0;
               options.curLvl += 1;
               options.curPts += options.curLvl*5;
@@ -71,7 +71,7 @@ function timedXpVC(){
             dutils.updateMemberOptions(client, member.user, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Activity Rewards");
         });
       });
-      console.log("Looped for VC Xp reward. Rewarded " + (gen1.length + gen2.length) + " members.");
+      console.log("Looped for VC Xp reward. Rewarded " + (gen1.array.length + gen2.array.length) + " members.");
 }
 
 client.on("error", (O_o) => {});
@@ -181,7 +181,6 @@ client.on("message", async msg => {
         // console.log('Permission: ' + permission);
         var options = JSON.parse(opts);//{"muted":true,"developer":false,"curXp":0,"curLvl":0,"curPts":0}
         // console.log('Options: ' + options);
-        console.log
         if(options["muted"]){
           msg.delete();
           const embed = new Discord.RichEmbed()
@@ -207,6 +206,7 @@ client.on("message", async msg => {
            curLvl += 1;
            nxtPts = curLvl*5;
            curPts += nxtPts;
+           curXp = 0;
            const embed = new Discord.RichEmbed()
            .setColor(0xD042F4)
            .setAuthor(`Automated Message | ${message.author.tag}`, client.user.avatarURL)
