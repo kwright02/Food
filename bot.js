@@ -28,7 +28,7 @@ function timedXpVC(){
       gen1.forEach(function(member){
         dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
             var options = JSON.parse(opts);
-            var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
+            var channel = client.guilds.get("370562411973050368").channels.find(chan => chan.name === "level-up");
             if((options.curLvl * 150) <= options.curLvl){
               options.curXp = 0;
               options.curLvl += 1;
@@ -51,7 +51,7 @@ function timedXpVC(){
       gen2.forEach(function(member){
         dutils.getMemberOptions(client, member.user, connection, "Activity Rewards").then(function(opts){
             var options = JSON.parse(opts);
-            var channel = client.guilds.get("370562411973050368").channels.get("526979544557551616");
+            var channel = client.guilds.get("370562411973050368").channels.find(chan => chan.name === "level-up");
             if((options.curLvl * 150) <= options.curLvl){
               options.curXp = 0;
               options.curLvl += 1;
@@ -214,7 +214,8 @@ client.on("message", async msg => {
            .addField("Reason", `You leveled up to level ${curLvl} and gained ${nxtPts} points!`, true)
            .setFooter("Food Bot | v1.2")
            .setTimestamp();
-           msg.channel.send( {embed} );
+           var mchannel = client.guilds.get("370562411973050368").channels.find(chan => chan.name === "level-up");
+           mhannel.send( {embed} );
         }
         options["curXp"] = curXp;
         options["curLvl"] = curLvl;
