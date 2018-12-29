@@ -20,6 +20,9 @@ module.exports = {
           console.error(error.message);
           return resolve(null);
         }
+        if(result.length === 0) {
+          return resolve(null);
+        }
         console.log('\n[' + func + ' -> Database Utils -> Log] Got options for user ' + member.username + '!');
         return resolve(result[0]["options"]);
       });
@@ -62,6 +65,9 @@ module.exports = {
       return connection.query("SELECT permission FROM members WHERE memberid='" + member.id +"';", function(error, result){
         if(error) {
           console.error(error.message);
+          return resolve(null);
+        }
+        if(result.length === 0) {
           return resolve(null);
         }
         console.log('\n[' + func + ' -> Database Utils -> Log] Got permission for user ' + member.username + '!');

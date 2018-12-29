@@ -17,7 +17,7 @@ module.exports = {
         .addField(`**Points**:`,` ${curPts}`, true)
         .addField(`\n**XP**:`,` ${curXp}`, true)
         .addField(`\n**Level**:`,` ${curLvl}`, true)
-        .addField(`\n**XP Until Level Up**: ${nxtLvl-curXp}`, true)
+        .addField(`\n**XP Until Level Up**:`, `${nxtLvl-curXp}`, true)
         .setFooter('Food Bot | v1.2')
         .setTimestamp()
         msg.channel.send( {embed} );

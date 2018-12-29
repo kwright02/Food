@@ -171,7 +171,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
 
 client.on("message", async msg => {
   if (msg.author.bot) return;
-  if(msg.channel.name !== "bot_testing") return;
+  // if(msg.channel.name !== "bot_testing") return;
   let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
@@ -215,7 +215,7 @@ client.on("message", async msg => {
            .setFooter("Food Bot | v1.2")
            .setTimestamp();
            var mchannel = client.guilds.get("370562411973050368").channels.find(chan => chan.name === "level-up");
-           mhannel.send( {embed} );
+           mchannel.send( {embed} );
         }
         options["curXp"] = curXp;
         options["curLvl"] = curLvl;
