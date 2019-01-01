@@ -1,11 +1,8 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const userinfo = require("../data/userinfo.json");
 
 module.exports = {
     run: async (client, msg, connection, args) => {
-      var permission = parseInt(dutils.getMemberPermission(client, msg.author, connection));
-      if(permission >= 3) return msg.channel.send("You are already a moderator.");
       sendSurvey(client, client.config.surveys.applymod, msg, "Moderator Application");
     },
     meta: {
