@@ -143,10 +143,11 @@ if (dm.guild === null) return;
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
-  if(reaction.message.channel.id === "446769808218783764"){
+  if(reaction.message.channel.name === "roles" && !user.bot){
     try {
+      var roles = reaction.message.guild.roles.array();
       const member = await reaction.message.guild.member(user);
-      const attemptedRole = await reaction.message.guild.roles.find(role => role.name === reaction.emoji.name);
+      const attemptedRole = await reaction.message.guild.roles.find(role => role.name.split(" ").join("") === reaction.emoji.name);
       const hasRole = await member.roles.has(attemptedRole.id);
       if(!hasRole){
         await member.addRole(attemptedRole).catch(console.error);
@@ -159,9 +160,9 @@ client.on('messageReactionAdd', async (reaction, user) => {
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
-  if(reaction.message.channel.id === "446769808218783764"){
+  if(reaction.message.channel.name === "roles"){
     const member = await reaction.message.guild.member(user);
-    const attemptedRole = await reaction.message.guild.roles.find(role => role.name === reaction.emoji.name);
+    const attemptedRole = await reaction.message.guild.roles.find(role => role.name.split(" ").join("") === reaction.emoji.name);
     const hasRole = await member.roles.has(attemptedRole.id);
     if(hasRole){
       await member.removeRole(attemptedRole).catch(console.error);
