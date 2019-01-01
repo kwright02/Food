@@ -43,6 +43,7 @@ function timedXpVC(){
               channel.send( {embed} );
             } else {
                 options.curXp += 60;
+		console.log("quick change");
             }
             var stropts = JSON.stringify(options);
             dutils.updateMemberOptions(client, member.user, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Activity Rewards");
