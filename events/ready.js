@@ -88,7 +88,6 @@ module.exports = {
 ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
 CS:GO - ${server.emojis.get("459930831176204289")}
-Fortnite - ${server.emojis.get("459931131924447234")}
 Garry's Mod - ${server.emojis.get("459931586880602123")}
 League of Legends - ${server.emojis.get("459931849062350848")}
 Minecraft - ${server.emojis.get("459934891895947264")}
@@ -120,6 +119,21 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
   msg.react(server.emojis.get("459936871355645962"))
   msg.react(server.emojis.get("459931398938165249"))
   msg.react(server.emojis.get("473540641423622164"))
+  msg.react(server.emojis.get("480431935957762048"));
+  msg.react(server.emojis.get("459930326349774849"));
+  msg.react(server.emojis.get("459930831176204289"));
+  msg.react(server.emojis.get("459931586880602123"));
+  msg.react(server.emojis.get("459931849062350848"));
+  msg.react(server.emojis.get("459934891895947264"));
+  msg.react(server.emojis.get("459935480281301004"));//7
+  msg.react(server.emojis.get("459935231227723787"));//8
+  msg.react(server.emojis.get("459935629577420800"));//9
+  msg.react(server.emojis.get("459935810989326336"));//10
+  msg.react(server.emojis.get("459936293451988992"));//11
+  msg.react(server.emojis.get("459936570208681994"));//12
+  msg.react(server.emojis.get("459936871355645962"));//13
+  msg.react(server.emojis.get("473540641423622164"));//14
+  msg.react(server.emojis.get("459931398938165249"));//15
 });
   }
 }
