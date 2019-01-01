@@ -83,7 +83,7 @@ module.exports = {
     let channel = client.channels.find(chan => chan.name === "roles");
     logs.send(":white_check_mark: Bot Online **("+ currentdate.getDay()+ "/"+ currentdate.getMonth()+ "/"+ currentdate.getFullYear()+ " - "+ hour+ ":"+ currentdate.getMinutes()+ " EST)**");
     channel.bulkDelete(10);
-    /*channel.send(`**React to this message to get the roles**\n
+    channel.send(`**React to this message to get the roles**\n
 **Games**
 ARK - ${server.emojis.get("480431935957762048")}
 Brawlhalla - ${server.emojis.get("459930326349774849")}
@@ -120,6 +120,6 @@ Unturned - ${server.emojis.get("459931398938165249")}\n
   msg.react(server.emojis.get("459936871355645962"))
   msg.react(server.emojis.get("459931398938165249"))
   msg.react(server.emojis.get("473540641423622164"))
-});*/
+});
   }
 }

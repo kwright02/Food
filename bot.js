@@ -43,7 +43,6 @@ function timedXpVC(){
               channel.send( {embed} );
             } else {
                 options.curXp += 60;
-		console.log("quick change");
             }
             var stropts = JSON.stringify(options);
             dutils.updateMemberOptions(client, member.user, stropts.replace("\"{", "{").replace("\"}", "}"), connection, "Activity Rewards");
@@ -283,8 +282,6 @@ client.on("message", async msg => {
   }).catch(function(error){
     throw error;
   });
-return;
-
   if (msg.content === "STOP") {
     msg.channel.send("https://www.youtube.com/watch?v=O2otihe65SI")
   } else if (msg.content === "no homo") {
