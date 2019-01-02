@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
 const fs = require("fs");
-const userinfo = require("../data/userinfo.json");
 
 module.exports = {
     run: async (client, msg, connection, args) => {
