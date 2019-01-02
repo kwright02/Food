@@ -2,7 +2,9 @@ const Discord = require("discord.js");
 const dutils = require("../database.js");
 
 module.exports = {
-    run: async (client, msg, connection, args) => {
+    run: async (client, msg, connection, args) => { 
+      let staffRole = msg.guild.roles.find("name", "Staff");
+      if(!msg.member.roles.has(staffRole.id)) return msg.channel.send("You must be a staff member to run this command.");
       let user = msg.mentions.members.first();
       if (!user) user = msg.guild.members.get(args[0]);
       if (!user) return await msg.channel.send("Please mention a valid user to warn.");
