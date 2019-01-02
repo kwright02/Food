@@ -1,4 +1,3 @@
-const config = require("../data/userinfo.json");
 const fs = require("fs");
 const Enmap = require('enmap');
 
