@@ -4,6 +4,11 @@ const fs = require('fs');
 
 module.exports = {
     run: async (client, msg, connection, args) => {
+      let bc = client.channels.get("399916099325657088");
+      if (msg.channel.id !== "399916099325657088") {
+       msg.channel.send(`This command can only be used in ${bc}.`)
+       return;
+        }
     var options = dutils.getMemberOptions(client, msg.author.user, connection, "Food Command");
 
     if (curDaily != moment().format('L')) {
