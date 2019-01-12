@@ -85,11 +85,11 @@ module.exports = {
     if(minutes < 10) {
       minutes = "0" + minutes;
     }
-    var seconds = parseInt(currentDate.getUTCSeconds() + 1);
+    var seconds = parseInt(currentDate.getUTCSeconds());
     if(seconds < 10) {
       seconds = "0" + seconds;
     }
-    logs.send(":white_check_mark: Bot Online **(" + (currentDate.getUTCMonth() + 1) + "/" + currentDate.getUTCDate() + "/" + currentDate.getUTCFullYear() + " @ " + (currentDate.getUTCHours() + 1) + ":" + minutes + ":" + seconds + " UTC )**");
+    logs.send(":white_check_mark: Bot Online **(" + (currentDate.getUTCMonth() + 1) + "/" + currentDate.getUTCDate() + "/" + currentDate.getUTCFullYear() + " @ " + (currentDate.getUTCHours()) + ":" + minutes + ":" + seconds + " UTC )**");
     channel.bulkDelete(10);
     channel.send(`**React to this message to get the roles**\n
 **Games**
