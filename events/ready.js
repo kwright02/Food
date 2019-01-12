@@ -74,13 +74,19 @@ module.exports = {
         }
         console.log("[Log] Ensured database table \`punishments\` was created");
       });
-    var currentdate = new Date();
+    var currentDate = new Date(Date.now());
     var guilds = client.guilds.array();
     let logs = client.channels.find(chan => chan.name === "bot_logs");
-    let hour = currentdate.getHours() + 3;
+    // let hour = currentdate.getHours() + 3;
     let server = client.guilds.find(guild => guild.name === "United Federations of Food");
     let channel = client.channels.find(chan => chan.name === "roles");
-    logs.send(":white_check_mark: Bot Online **("+ currentdate.getDay()+ "/"+ currentdate.getMonth()+ "/"+ currentdate.getFullYear()+ " - "+ hour+ ":"+ currentdate.getMinutes()+ " EST)**");
+    // if(currentDate.getTimezoneOffset)
+    var minutes = parseInt(currentDate.getUTCMinutes());
+    console.log(minutes);
+    if(minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    logs.send(":white_check_mark: Bot Online **( @ "+ (currentDate.getUTCMonth() + 1) + "/" + currentDate.getUTCDate() + "/" + currentDate.getUTCFullYear() + " - " + (currentDate.getUTCHours() + 1) + ":" + minutes + ":" + (currentDate.getUTCSeconds() + 1) + " UTC )**");
     channel.bulkDelete(10);
     channel.send(`**React to this message to get the roles**\n
 **Games**
