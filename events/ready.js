@@ -82,11 +82,14 @@ module.exports = {
     let channel = client.channels.find(chan => chan.name === "roles");
     // if(currentDate.getTimezoneOffset)
     var minutes = parseInt(currentDate.getUTCMinutes());
-    console.log(minutes);
     if(minutes < 10) {
       minutes = "0" + minutes;
     }
-    logs.send(":white_check_mark: Bot Online **( @ "+ (currentDate.getUTCMonth() + 1) + "/" + currentDate.getUTCDate() + "/" + currentDate.getUTCFullYear() + " - " + (currentDate.getUTCHours() + 1) + ":" + minutes + ":" + (currentDate.getUTCSeconds() + 1) + " UTC )**");
+    var seconds = parseInt(currentDate.getUTCSeconds() + 1);
+    if(seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    logs.send(":white_check_mark: Bot Online **(" + (currentDate.getUTCMonth() + 1) + "/" + currentDate.getUTCDate() + "/" + currentDate.getUTCFullYear() + " @ " + (currentDate.getUTCHours() + 1) + ":" + minutes + ":" + seconds + " UTC )**");
     channel.bulkDelete(10);
     channel.send(`**React to this message to get the roles**\n
 **Games**
