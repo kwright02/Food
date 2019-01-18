@@ -173,6 +173,9 @@ client.on('messageReactionRemove', async (reaction, user) => {
 client.on("message", async msg => {
   if (msg.author.bot) return;
   // if(msg.channel.name !== "bot_testing") return;
+  if(msg.author.cooldown) {
+    return;
+  }
   let cards = ["https://i.imgur.com/GaESyzw.png", "https://i.imgur.com/HOwoODP.png", "https://i.imgur.com/0jlEeCL.png", "https://i.imgur.com/JqTsbgw.png"]
   let random = cards[Math.floor(Math.random() * cards.length)];
   var message = msg;
@@ -290,6 +293,62 @@ client.on("message", async msg => {
   } else if (msg.content === "no u") {
     msg.channel.send("", {files: [random]})
   }
+});
+
+client.on("message", function(msg) {
+  if(msg.author === client.user) {
+    return;
+  }
+  var sender = msg.author;
+  const channel = msg.channel;
+  // If channel has no recorded message for session, create messages array and add sent message
+  if(!channel.messages) {
+    channel.messages = [];
+  } else {
+    if(channel.slowmode) {
+      if(!sender.cooldown) {
+        sender.cooldown = setTimeout(function() {
+          sender.cooldown = null;
+        }, 5000);
+        return;
+      }
+      msg.delete();
+      return;
+    }
+    for(var id in channel.messages) {
+      // console.log(channel.messages[id]);
+      var curMessage = channel.messages[id];
+      console.log(curMessage.messages);
+      var length = 0;
+      for(var id2 in curMessage.messages) {
+        length++;
+      }
+      console.log(length);
+      if(length === 4 && curMessage.timer) {
+        msg.delete();
+        channel.send("Slowmode has been activated in " + channel.name);
+        sender.cooldown = setTimeout(function() {
+          sender.cooldown = null;
+        }, 5000);
+        channel.slowmode = setTimeout(function() {
+          channel.slowmode = null;
+          channel.send("Slowmode has been deactivated in " + channel.name);
+        }, 60000);
+        break;
+      }
+      channel.messages[id].messages[msg.id] = msg;
+    }
+  }
+  var length = channel.messages.length;
+  const timer = function() {
+    delete channel.messages[msg.id];
+  };
+  var message = {
+    "msg":msg,
+    "timer": setTimeout(timer, 10000),
+    "messages":[]
+  };
+  channel.messages[msg.id] = message;
 });
 
 fs.readdir('./events', (err, files) => {
