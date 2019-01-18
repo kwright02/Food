@@ -316,14 +316,11 @@ client.on("message", function(msg) {
       return;
     }
     for(var id in channel.messages) {
-      // console.log(channel.messages[id]);
       var curMessage = channel.messages[id];
-      console.log(curMessage.messages);
       var length = 0;
       for(var id2 in curMessage.messages) {
         length++;
       }
-      console.log(length);
       if(length === 4 && curMessage.timer) {
         msg.delete();
         channel.send("Slowmode has been activated in " + channel.name);
